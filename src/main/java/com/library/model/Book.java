@@ -6,22 +6,26 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "copies")
-public class Copy {
+@Entity(name = "books")
+public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     private Long id;
+    private String author;
+    private String title;
+    private int year;
 
-    @ManyToOne
-    @JoinColumn(name="book_id")
-    Book book;
-
-    private String status;
+    @OneToMany(targetEntity = Copy.class,
+            mappedBy = "book",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    List<Copy> copies;
 
 }
