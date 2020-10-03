@@ -23,14 +23,18 @@ public class CopyServiceImplementation implements CopyService {
     }
 
     @Override
-    public Copy addNewCopy(Copy copy) throws CopyExistException {
+    public Copy addNewCopy(Copy copy) {
         copy.setStatus(Copy.Status.TO_RENT);
         return save(copy);
     }
 
     @Override
     public void deleteById(Long id) throws CopyNotFoundException {
-        copyRepository.deleteById(id);
+        if (findById(id).isPresent()) {
+            copyRepository.deleteById(id);
+        } else {
+            throw new CopyNotFoundException();
+        }
     }
 
     @Override
