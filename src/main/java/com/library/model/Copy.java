@@ -20,8 +20,12 @@ public class Copy {
 
     @ManyToOne
     @JoinColumn(name="book_id")
-    Book book;
+    private Book book;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
+    public enum Status {
+        TO_RENT, TAKEN;
+    }
 }

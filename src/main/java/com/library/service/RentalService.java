@@ -15,7 +15,7 @@ public interface RentalService {
     Rental save(Rental rental);
     Rental addNewRental(User user, Copy copy) throws RentalExistException;
     Rental returnCopy(Rental rental) throws RentalNotFoundException;
-    void extendReturnDate(Long id, LocalDateTime returnDate) throws RentalNotFoundException;
+    void extendReturnDate(Rental rental, LocalDateTime returnDate) throws RentalNotFoundException;
     void deleteById(Long id) throws RentalNotFoundException;
     Collection<Rental> getAll();
     Optional<Rental> findById(Long id);
