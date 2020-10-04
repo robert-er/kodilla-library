@@ -1,12 +1,10 @@
 package com.library.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
 import java.time.LocalDateTime;
 
-@Getter
-@AllArgsConstructor
+@Value
 public class UserDto {
 
     private String name;

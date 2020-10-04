@@ -5,28 +5,19 @@ import com.library.model.dto.UserDto;
 import com.library.service.exception.UserExistException;
 import com.library.service.exception.UserNotFoundException;
 import com.library.service.implementation.UserServiceImplementation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @CrossOrigin("*")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/library/user")
 public class UserController {
 
-    private UserServiceImplementation userServiceImplementation;
-    private UserMapper userMapper;
-
-    @Autowired
-    public void setUserServiceImplementation(UserServiceImplementation userServiceImplementation) {
-        this.userServiceImplementation = userServiceImplementation;
-    }
-
-    @Autowired
-    public void setUserMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+    private final UserServiceImplementation userServiceImplementation;
+    private final UserMapper userMapper;
 
     @PostMapping("add")
     public void addUser(@RequestBody UserDto userDto) throws UserExistException {

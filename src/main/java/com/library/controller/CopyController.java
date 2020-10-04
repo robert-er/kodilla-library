@@ -9,34 +9,20 @@ import com.library.service.exception.BookNotFoundException;
 import com.library.service.exception.CopyNotFoundException;
 import com.library.service.implementation.BookServiceImplementation;
 import com.library.service.implementation.CopyServiceImplementation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @CrossOrigin("*")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/library/copy")
 public class CopyController {
 
-    private CopyServiceImplementation copyServiceImplementation;
-    private BookServiceImplementation bookServiceImplementation;
-    private CopyMapper copyMapper;
-
-    @Autowired
-    public void setCopyServiceImplementation(CopyServiceImplementation copyServiceImplementation) {
-        this.copyServiceImplementation = copyServiceImplementation;
-    }
-
-    @Autowired
-    public void setBookServiceImplementation(BookServiceImplementation bookServiceImplementation) {
-        this.bookServiceImplementation = bookServiceImplementation;
-    }
-
-    @Autowired
-    public void setCopyMapper(CopyMapper copyMapper) {
-        this.copyMapper = copyMapper;
-    }
+    private final CopyServiceImplementation copyServiceImplementation;
+    private final BookServiceImplementation bookServiceImplementation;
+    private final CopyMapper copyMapper;
 
     @PostMapping("add")
     public void addCopy(@RequestParam Long bookId) throws BookNotFoundException {

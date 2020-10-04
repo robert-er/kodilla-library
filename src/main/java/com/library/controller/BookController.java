@@ -5,28 +5,19 @@ import com.library.model.dto.BookDto;
 import com.library.service.exception.BookExistException;
 import com.library.service.exception.BookNotFoundException;
 import com.library.service.implementation.BookServiceImplementation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @CrossOrigin("*")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/library/book")
 public class BookController {
 
-    private BookServiceImplementation bookServiceImplementation;
-    private BookMapper bookMapper;
-
-    @Autowired
-    public void setBookServiceImplementation(BookServiceImplementation bookServiceImplementation) {
-        this.bookServiceImplementation = bookServiceImplementation;
-    }
-
-    @Autowired
-    public void setBookMapper(BookMapper bookMapper) {
-        this.bookMapper = bookMapper;
-    }
+    private final BookServiceImplementation bookServiceImplementation;
+    private final BookMapper bookMapper;
 
     @PostMapping("add")
     public void addBook(@RequestBody BookDto bookDto) throws BookExistException {
