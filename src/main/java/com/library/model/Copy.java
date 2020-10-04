@@ -1,5 +1,6 @@
 package com.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +18,9 @@ public class Copy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @JsonBackReference
+    @NotNull
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="book_id")
     private Book book;
 
@@ -25,6 +28,6 @@ public class Copy {
     private Status status;
 
     public enum Status {
-        TO_RENT, TAKEN;
+        toRent, rented;
     }
 }

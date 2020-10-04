@@ -7,11 +7,13 @@ import com.library.repository.RentalRepository;
 import com.library.service.RentalService;
 import com.library.service.exception.RentalExistException;
 import com.library.service.exception.RentalNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class RentalServiceImplementation implements RentalService {
 
     private final RentalRepository rentalRepository;
@@ -39,7 +41,7 @@ public class RentalServiceImplementation implements RentalService {
                 ).isPresent()) {
             throw new RentalExistException();
         }
-        copy.setStatus(Copy.Status.TAKEN);
+        copy.setStatus(Copy.Status.rented);
         return save(rental);
     }
 
@@ -51,7 +53,7 @@ public class RentalServiceImplementation implements RentalService {
                         rental.getCopy(),
                         rental.getDateOfRent()
                 ).isPresent()) {
-            rental.getCopy().setStatus(Copy.Status.TO_RENT);
+            rental.getCopy().setStatus(Copy.Status.toRent);
             return rental;
         } else {
             throw new RentalNotFoundException();

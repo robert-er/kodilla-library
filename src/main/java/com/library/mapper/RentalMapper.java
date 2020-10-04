@@ -2,7 +2,9 @@ package com.library.mapper;
 
 import com.library.model.Rental;
 import com.library.model.dto.RentalDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RentalMapper {
 
     public Rental mapToRental(RentalDto rentalDto) {

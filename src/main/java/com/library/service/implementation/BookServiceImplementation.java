@@ -5,10 +5,12 @@ import com.library.repository.BookRepository;
 import com.library.service.BookService;
 import com.library.service.exception.BookExistException;
 import com.library.service.exception.BookNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class BookServiceImplementation implements BookService {
 
     private final BookRepository bookRepository;

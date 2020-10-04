@@ -8,7 +8,6 @@ import com.library.service.implementation.UserServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -18,15 +17,6 @@ public class UserController {
 
     private UserServiceImplementation userServiceImplementation;
     private UserMapper userMapper;
-
-
-    public UserServiceImplementation getUserServiceImplementation() {
-        return userServiceImplementation;
-    }
-
-    public UserMapper getUserMapper() {
-        return userMapper;
-    }
 
     @Autowired
     public void setUserServiceImplementation(UserServiceImplementation userServiceImplementation) {

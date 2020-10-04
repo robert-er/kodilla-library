@@ -4,10 +4,12 @@ import com.library.model.Copy;
 import com.library.repository.CopyRepository;
 import com.library.service.CopyService;
 import com.library.service.exception.CopyNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CopyServiceImplementation implements CopyService {
 
     private final CopyRepository copyRepository;
@@ -23,7 +25,7 @@ public class CopyServiceImplementation implements CopyService {
 
     @Override
     public Copy addNewCopy(Copy copy) {
-        copy.setStatus(Copy.Status.TO_RENT);
+        copy.setStatus(Copy.Status.toRent);
         return save(copy);
     }
 
