@@ -6,7 +6,7 @@ import com.library.service.BookService;
 import com.library.service.exception.BookExistException;
 import com.library.service.exception.BookNotFoundException;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public class BookServiceImplementation implements BookService {
@@ -24,7 +24,7 @@ public class BookServiceImplementation implements BookService {
 
     @Override
     public Book addNewBook(Book book) throws BookExistException {
-        if (bookRepository.exists(book)) {
+        if (bookRepository.findByAuthorAndTitleAndYear(book.getAuthor(), book.getTitle(), book.getYear()).isPresent()) {
             throw new BookExistException();
         }
         return save(book);
@@ -40,7 +40,7 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
-    public Collection<Book> getAll() {
+    public List<Book> getAll() {
         return bookRepository.findAll();
     }
 

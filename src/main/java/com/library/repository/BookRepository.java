@@ -20,5 +20,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Override
     Optional<Book> findById(Long id);
 
-    boolean exists(Book book);
+    Optional<Book> findByAuthorAndTitleAndYear(String author, String title, int year);
+
 }

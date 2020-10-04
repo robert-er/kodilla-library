@@ -2,7 +2,6 @@ package com.library.repository;
 
 
 import com.library.model.User;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -22,5 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     Optional<User> findById(Long id);
 
-    boolean exists(User user);
+    Optional<User>findByNameAndSurname(String name, String surname);
+
 }

@@ -9,7 +9,7 @@ import com.library.service.exception.RentalExistException;
 import com.library.service.exception.RentalNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public class RentalServiceImplementation implements RentalService {
@@ -29,18 +29,28 @@ public class RentalServiceImplementation implements RentalService {
 
     @Override
     public Rental addNewRental(User user, Copy copy) throws RentalExistException {
-        Rental newRental = new Rental(user, copy, LocalDateTime.now(),
+        Rental rental = new Rental(user, copy, LocalDateTime.now(),
                 LocalDateTime.now().plusDays(STANDARD_RENTAL_TIME_IN_DAYS));
-        if (rentalRepository.exists(newRental)) {
+        if (rentalRepository
+                .findByUserAndCopyAndDateOfRent(
+                        rental.getUser(),
+                        rental.getCopy(),
+                        rental.getDateOfRent()
+                ).isPresent()) {
             throw new RentalExistException();
         }
         copy.setStatus(Copy.Status.TAKEN);
-        return save(newRental);
+        return save(rental);
     }
 
     @Override
     public Rental returnCopy(Rental rental) throws RentalNotFoundException {
-        if (rentalRepository.exists(rental)) {
+        if (rentalRepository
+                .findByUserAndCopyAndDateOfRent(
+                        rental.getUser(),
+                        rental.getCopy(),
+                        rental.getDateOfRent()
+                ).isPresent()) {
             rental.getCopy().setStatus(Copy.Status.TO_RENT);
             return rental;
         } else {
@@ -50,7 +60,12 @@ public class RentalServiceImplementation implements RentalService {
 
     @Override
     public void extendReturnDate(Rental rental, LocalDateTime returnDate) throws RentalNotFoundException {
-        if (rentalRepository.exists(rental)) {
+        if (rentalRepository
+                .findByUserAndCopyAndDateOfRent(
+                        rental.getUser(),
+                        rental.getCopy(),
+                        rental.getDateOfRent()
+                ).isPresent()) {
             rental.setDateOfReturn(returnDate);
         } else {
             throw new RentalNotFoundException();
@@ -67,7 +82,7 @@ public class RentalServiceImplementation implements RentalService {
     }
 
     @Override
-    public Collection<Rental> getAll() {
+    public List<Rental> getAll() {
         return rentalRepository.findAll();
     }
 

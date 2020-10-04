@@ -7,7 +7,7 @@ import com.library.service.exception.RentalExistException;
 import com.library.service.exception.RentalNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface RentalService {
@@ -17,7 +17,7 @@ public interface RentalService {
     Rental returnCopy(Rental rental) throws RentalNotFoundException;
     void extendReturnDate(Rental rental, LocalDateTime returnDate) throws RentalNotFoundException;
     void deleteById(Long id) throws RentalNotFoundException;
-    Collection<Rental> getAll();
+    List<Rental> getAll();
     Optional<Rental> findById(Long id);
 
 }

@@ -5,10 +5,13 @@ import com.library.repository.UserRepository;
 import com.library.service.UserService;
 import com.library.service.exception.UserExistException;
 import com.library.service.exception.UserNotFoundException;
+import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+@Service
 public class UserServiceImplementation implements UserService {
 
     private final UserRepository userRepository;
@@ -24,7 +27,7 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public User addNewUser(User user) throws UserExistException {
-        if (userRepository.exists(user)) {
+        if (userRepository.findByNameAndSurname(user.getName(), user.getSurname()).isPresent()) {
             throw new UserExistException();
         }
         return save(user);
@@ -40,8 +43,8 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public Collection<User> getAll() {
-        return userRepository.findAll();
+    public List<User> getAll() {
+            return userRepository.findAll();
     }
 
     @Override

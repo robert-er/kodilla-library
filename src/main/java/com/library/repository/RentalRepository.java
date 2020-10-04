@@ -1,8 +1,11 @@
 package com.library.repository;
 
+import com.library.model.Copy;
 import com.library.model.Rental;
+import com.library.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,5 +23,6 @@ public interface RentalRepository extends JpaRepository<Rental, Long>  {
     @Override
     Optional<Rental> findById(Long id);
 
-    boolean exists(Rental rental);
+    Optional<Rental> findByUserAndCopyAndDateOfRent(User user, Copy copy, LocalDateTime dateOfRent);
+
 }

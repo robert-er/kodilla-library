@@ -3,10 +3,9 @@ package com.library.service.implementation;
 import com.library.model.Copy;
 import com.library.repository.CopyRepository;
 import com.library.service.CopyService;
-import com.library.service.exception.CopyExistException;
 import com.library.service.exception.CopyNotFoundException;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public class CopyServiceImplementation implements CopyService {
@@ -38,7 +37,7 @@ public class CopyServiceImplementation implements CopyService {
     }
 
     @Override
-    public Collection<Copy> getAll() {
+    public List<Copy> getAll() {
         return copyRepository.findAll();
     }
 
