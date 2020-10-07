@@ -1,6 +1,5 @@
 package com.library.controller;
 
-import com.library.mapper.BookMapper;
 import com.library.mapper.CopyMapper;
 import com.library.model.Book;
 import com.library.model.Copy;
@@ -62,5 +61,4 @@ public class CopyController {
                 })
                 .orElseThrow(CopyNotFoundException::new);
     }
-
 }

@@ -4,6 +4,9 @@ import com.library.model.Rental;
 import com.library.model.dto.RentalDto;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class RentalMapper {
 
@@ -20,4 +23,9 @@ public class RentalMapper {
         return new RentalDto(rental.getUser(), rental.getCopy(), rental.getDateOfRent(), rental.getDateOfReturn());
     }
 
+    public List<RentalDto> mapToRentalDtoList(List<Rental> rentalList) {
+        return rentalList.stream()
+                .map(this::mapToRentalDto)
+                .collect(Collectors.toList());
+    }
 }

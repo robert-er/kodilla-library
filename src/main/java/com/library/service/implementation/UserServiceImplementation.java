@@ -26,9 +26,9 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public User addNewUser(User user) throws UserExistException {
-        if (userRepository.findByNameAndSurname(user.getName(), user.getSurname()).isPresent()) {
-            throw new UserExistException();
-        }
+//        if (userRepository.findByNameAndSurname(user.getName(), user.getSurname()).isPresent()) {
+//            throw new UserExistException();
+//        }
         return save(user);
     }
 

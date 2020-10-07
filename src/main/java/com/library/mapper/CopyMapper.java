@@ -1,8 +1,6 @@
 package com.library.mapper;
 
-import com.library.model.Book;
 import com.library.model.Copy;
-import com.library.model.dto.BookDto;
 import com.library.model.dto.CopyDto;
 import org.springframework.stereotype.Component;
 
@@ -28,5 +26,4 @@ public class CopyMapper {
                 .map(this::mapToCopyDto)
                 .collect(Collectors.toList());
     }
-
 }

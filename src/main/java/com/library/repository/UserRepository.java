@@ -1,6 +1,5 @@
 package com.library.repository;
 
-
 import com.library.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
