@@ -8,6 +8,7 @@ import com.library.service.implementation.UserServiceImplementation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -21,6 +22,7 @@ public class UserController {
 
     @PostMapping("add")
     public void addUser(@RequestBody UserDto userDto) throws UserExistException {
+        userDto.setSignUpDate(LocalDateTime.now());
         userServiceImplementation.addNewUser(userMapper.mapToUser(userDto));
     }
 
