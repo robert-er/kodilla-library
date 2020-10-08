@@ -4,6 +4,8 @@ import com.library.model.Copy;
 import com.library.model.Rental;
 import com.library.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,5 +26,15 @@ public interface RentalRepository extends JpaRepository<Rental, Long>  {
     Optional<Rental> findById(Long id);
 
     Optional<Rental> findByUserAndCopyAndDateOfRent(User user, Copy copy, LocalDateTime dateOfRent);
+
+    Optional<Rental> findByUser(User user);
+
+    @Transactional
+    void deleteByUser(User user);
+
+    Optional<Rental> findByCopy(Copy copy);
+
+    @Transactional
+    void deleteByCopy(Copy copy);
 
 }

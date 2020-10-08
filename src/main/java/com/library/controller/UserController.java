@@ -4,6 +4,7 @@ import com.library.mapper.UserMapper;
 import com.library.model.dto.UserDto;
 import com.library.service.exception.UserExistException;
 import com.library.service.exception.UserNotFoundException;
+import com.library.service.implementation.RentalServiceImplementation;
 import com.library.service.implementation.UserServiceImplementation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceImplementation userServiceImplementation;
+    private final RentalServiceImplementation rentalServiceImplementation;
     private final UserMapper userMapper;
 
     @PostMapping("add")
@@ -38,6 +40,7 @@ public class UserController {
 
     @DeleteMapping("delete")
     public void deleteUser(@RequestParam Long id) throws UserNotFoundException {
+        rentalServiceImplementation.deleteByUser(userServiceImplementation.findById(id));
         userServiceImplementation.deleteById(id);
     }
 

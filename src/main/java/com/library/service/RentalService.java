@@ -19,5 +19,9 @@ public interface RentalService {
     void deleteById(Long id) throws RentalNotFoundException;
     List<Rental> getAll();
     Optional<Rental> findById(Long id);
+    Optional<Rental> findByUser(User user);
+    void deleteByUser(Optional<User> user);
+    Optional<Rental> findByCopy(Copy copy);
+    void deleteByCopy(Optional<Copy> copy);
 
 }

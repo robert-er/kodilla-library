@@ -92,4 +92,32 @@ public class RentalServiceImplementation implements RentalService {
     public Optional<Rental> findById(Long id) {
         return rentalRepository.findById(id);
     }
+
+    @Override
+    public Optional<Rental> findByUser(User user) {
+        return rentalRepository.findByUser(user);
+    }
+
+    @Override
+    public void deleteByUser(Optional<User> user) {
+        if (user.isPresent()) {
+            if (findByUser(user.orElse(new User())).isPresent()) {
+                rentalRepository.deleteByUser(user.orElse(new User()));
+            }
+        }
+    }
+
+    @Override
+    public Optional<Rental> findByCopy(Copy copy) {
+        return rentalRepository.findByCopy(copy);
+    }
+
+    @Override
+    public void deleteByCopy(Optional<Copy> copy) {
+        if (copy.isPresent()) {
+            if (findByCopy(copy.orElse(new Copy())).isPresent()) {
+                rentalRepository.deleteByCopy(copy.orElse(new Copy()));
+            }
+        }
+    }
 }

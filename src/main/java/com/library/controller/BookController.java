@@ -36,6 +36,7 @@ public class BookController {
 
     @DeleteMapping("delete")
     public void deleteBook(@RequestParam Long id) throws BookNotFoundException {
+        //add method to delete existing copies and delete existing rentals
         bookServiceImplementation.deleteById(id);
     }
 

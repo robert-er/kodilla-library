@@ -8,6 +8,7 @@ import com.library.service.exception.BookNotFoundException;
 import com.library.service.exception.CopyNotFoundException;
 import com.library.service.implementation.BookServiceImplementation;
 import com.library.service.implementation.CopyServiceImplementation;
+import com.library.service.implementation.RentalServiceImplementation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class CopyController {
 
     private final CopyServiceImplementation copyServiceImplementation;
     private final BookServiceImplementation bookServiceImplementation;
+    private final RentalServiceImplementation rentalServiceImplementation;
     private final CopyMapper copyMapper;
 
     @PostMapping("add")
@@ -45,6 +47,7 @@ public class CopyController {
 
     @DeleteMapping("delete")
     public void deleteCopy(@RequestParam Long id) throws CopyNotFoundException {
+        rentalServiceImplementation.deleteByCopy(copyServiceImplementation.findById(id));
         copyServiceImplementation.deleteById(id);
     }
 
