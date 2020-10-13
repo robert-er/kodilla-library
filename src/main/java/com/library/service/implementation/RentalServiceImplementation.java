@@ -113,11 +113,7 @@ public class RentalServiceImplementation implements RentalService {
     }
 
     @Override
-    public void deleteByCopy(Optional<Copy> copy) {
-        if (copy.isPresent()) {
-            if (findByCopy(copy.orElse(new Copy())).isPresent()) {
-                rentalRepository.deleteByCopy(copy.orElse(new Copy()));
-            }
-        }
+    public void deleteByCopyId(Long copyId) {
+        Optional.ofNullable(copyId).ifPresent(rentalRepository::deleteByCopyId);
     }
 }

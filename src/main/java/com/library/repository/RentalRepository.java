@@ -35,6 +35,6 @@ public interface RentalRepository extends JpaRepository<Rental, Long>  {
     Optional<Rental> findByCopy(Copy copy);
 
     @Transactional
-    void deleteByCopy(Copy copy);
+    void deleteByCopyId(Long id);
 
 }

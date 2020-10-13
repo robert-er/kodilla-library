@@ -22,6 +22,6 @@ public interface RentalService {
     Optional<Rental> findByUser(User user);
     void deleteByUser(Optional<User> user);
     Optional<Rental> findByCopy(Copy copy);
-    void deleteByCopy(Optional<Copy> copy);
+    void deleteByCopyId(Long copyId);
 
 }

@@ -47,7 +47,7 @@ public class CopyController {
 
     @DeleteMapping("delete")
     public void deleteCopy(@RequestParam Long id) throws CopyNotFoundException {
-        rentalServiceImplementation.deleteByCopy(copyServiceImplementation.findById(id));
+        rentalServiceImplementation.deleteByCopyId(id);
         copyServiceImplementation.deleteById(id);
     }
 

@@ -25,7 +25,6 @@ public class RentalController {
     private final UserServiceImplementation userServiceImplementation;
     private final CopyServiceImplementation copyServiceImplementation;
     private final RentalMapper rentalMapper;
-    private final CopyMapper copyMapper;
 
     @PostMapping("add")
     public void addRental(@RequestParam Long userId,
