@@ -5,6 +5,7 @@ import com.library.model.dto.BookDto;
 import com.library.service.exception.BookExistException;
 import com.library.service.exception.BookNotFoundException;
 import com.library.service.implementation.BookServiceImplementation;
+import com.library.service.implementation.CopyServiceImplementation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class BookController {
 
     private final BookServiceImplementation bookServiceImplementation;
+    private final CopyServiceImplementation copyServiceImplementation;
     private final BookMapper bookMapper;
 
     @PostMapping("add")
@@ -36,7 +38,7 @@ public class BookController {
 
     @DeleteMapping("delete")
     public void deleteBook(@RequestParam Long id) throws BookNotFoundException {
-        //add method to delete existing copies and delete existing rentals
+        copyServiceImplementation.deleteByBookId(id);
         bookServiceImplementation.deleteById(id);
     }
 

@@ -12,6 +12,7 @@ public interface CopyService {
     Copy save(Copy copy);
     Copy addNewCopy(Copy copy) throws CopyExistException;
     void deleteById(Long id) throws CopyNotFoundException;
+    void deleteByBookId(Long bookId);
     List<Copy> getAll();
     Optional<Copy> findById(Long id);
 

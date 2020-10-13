@@ -2,21 +2,21 @@ package com.library.service.implementation;
 
 import com.library.model.Copy;
 import com.library.repository.CopyRepository;
+import com.library.repository.RentalRepository;
 import com.library.service.CopyService;
 import com.library.service.exception.CopyNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class CopyServiceImplementation implements CopyService {
 
     private final CopyRepository copyRepository;
-
-    public CopyServiceImplementation(CopyRepository copyRepository) {
-        this.copyRepository = copyRepository;
-    }
+    private final RentalServiceImplementation rentalServiceImplementation;
 
     @Override
     public Copy save(Copy copy) {
@@ -36,6 +36,14 @@ public class CopyServiceImplementation implements CopyService {
         } else {
             throw new CopyNotFoundException();
         }
+    }
+
+    @Override
+    public void deleteByBookId(Long bookId) {
+        Optional.ofNullable(bookId).ifPresent(id -> {
+            copyRepository.findByBookId(id).forEach( copy ->rentalServiceImplementation.deleteByCopyId(copy.getId()));
+            copyRepository.deleteByBookId(id);
+        });
     }
 
     @Override

@@ -27,12 +27,10 @@ public interface RentalRepository extends JpaRepository<Rental, Long>  {
 
     Optional<Rental> findByUserAndCopyAndDateOfRent(User user, Copy copy, LocalDateTime dateOfRent);
 
-    Optional<Rental> findByUser(User user);
+    List<Rental> findByUserId(Long id);
 
     @Transactional
-    void deleteByUser(User user);
-
-    Optional<Rental> findByCopy(Copy copy);
+    void deleteByUserId(Long id);
 
     @Transactional
     void deleteByCopyId(Long id);

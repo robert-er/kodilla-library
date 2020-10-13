@@ -40,7 +40,7 @@ public class UserController {
 
     @DeleteMapping("delete")
     public void deleteUser(@RequestParam Long id) throws UserNotFoundException {
-        rentalServiceImplementation.deleteByUser(userServiceImplementation.findById(id));
+        rentalServiceImplementation.deleteByUserId(id);
         userServiceImplementation.deleteById(id);
     }
 
