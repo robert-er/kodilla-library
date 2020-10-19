@@ -41,7 +41,7 @@ public class CopyServiceImplementation implements CopyService {
     @Override
     public void deleteByBookId(Long bookId) {
         Optional.ofNullable(bookId).ifPresent(id -> {
-            copyRepository.findByBookId(id).forEach( copy ->rentalServiceImplementation.deleteByCopyId(copy.getId()));
+            copyRepository.findByBookId(id).forEach( copy -> rentalServiceImplementation.deleteByCopyId(copy.getId()));
             copyRepository.deleteByBookId(id);
         });
     }
