@@ -23,9 +23,9 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping("add")
-    public void addUser(@RequestBody UserDto userDto) throws UserExistException {
+    public Long addUser(@RequestBody UserDto userDto) throws UserExistException {
         userDto.setSignUpDate(LocalDateTime.now());
-        userServiceImplementation.addNewUser(userMapper.mapToUser(userDto));
+        return userServiceImplementation.addNewUser(userMapper.mapToUser(userDto)).getId();
     }
 
     @GetMapping("get")

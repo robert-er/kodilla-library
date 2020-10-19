@@ -15,114 +15,134 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.Alphanumeric.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserControllerTest {
 
     @LocalServerPort
     private int port;
 
-    TestRestTemplate restTemplate = new TestRestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    ResponseEntity<String> response;
-    HttpEntity<UserDto> entity;
+    private final TestRestTemplate restTemplate = new TestRestTemplate();
 
     @Test
-    void test_A_getUser() {
+    void testGetUser() {
         //Given
-        createUser("Tom", "Jerry");
-        entity = new HttpEntity<>(null, headers);
-        //When
-        response = restTemplate.exchange(createURLWithPort("/library/user/get?id=1"),
-                HttpMethod.GET, entity, String.class);
-        //Then
-        assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData()));
-        //CleanUp
-        removeUser(1);
-    }
+        String name = "Jason";
+        String surname = "Testovsky";
+        String userId = createUser(name,surname);
 
-    @Test
-    void test_B_addUser() {
-        //Given + When
-        createUser("New", "User");
-        //Then
-        assertEquals(200, response.getStatusCodeValue());
-        //CleanUp
-        removeUser(2);
-    }
-
-    @Test
-    void test_C_getAll() {
-        //Given
-        createUser("Use", "Me");
-        createUser("Another", "User");
         //When
-        entity = new HttpEntity<>(null, headers);
-        response = restTemplate.exchange(createURLWithPort("/library/user/getAll"),
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/get?id=" + userId),
                 HttpMethod.GET, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData(name, surname)));
         //CleanUp
-        removeUser(3);
-        removeUser(4);
+        removeUser(userId);
     }
 
     @Test
-    void test_D_deleteUser() {
+    void testAddUser() {
         //Given
-        createUser("User", "ToDelete");
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> entity = new HttpEntity<>(new UserDto("Tomas",
+                "Surname",
+                LocalDateTime.of(1999, 1, 15,2,3, 4))
+                , headers);
         //When
-        entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/add"),
+                HttpMethod.POST, entity, String.class);
+        String userId = response.getBody();
+        //Then
+        assertEquals(200, response.getStatusCodeValue());
+        assertNotEquals("0", userId);
+        //CleanUp
+        removeUser(userId);
+    }
+
+    @Test
+    void testGetAll() {
+        //Given
+        String user1name = "John";
+        String user1surname = "Smith";
+        String user2name = "Edvard";
+        String user2surname = "Norton";
+        String user1Id = createUser(user1name, user1surname);
+        String user2Id = createUser(user2name, user2surname);
         //When
-        response = restTemplate.exchange(createURLWithPort("/library/user/get?id=5"),
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/getAll"),
                 HttpMethod.GET, entity, String.class);
-        System.out.println("test_delete_user response: " + response.getStatusCode());
-        removeUser(5);
+        //Then
+        assertEquals(200, response.getStatusCodeValue());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData(user1name, user1surname)));
+        assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData(user2name, user2surname)));
+        //CleanUp
+        removeUser(user1Id);
+        removeUser(user2Id);
+    }
+
+    @Test
+    void testDeleteUser() {
+        //Given
+        String userId = createUser("Nicole", "Henderson");
+        //When
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/delete?id=" + userId),
+                HttpMethod.DELETE, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
     }
 
     @Test
-    void test_E_updateUser() {
+    void testUpdateUser() {
         //Given
-        createUser("Mood", "ToChange");
+        String name = "Mark";
+        String surname = "Combo";
+        String changedName = "Otto";
+        String userId = createUser(name, surname);
         //When
-        entity = new HttpEntity<>(new UserDto("Tom",
-                "Jerry",
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> entity = new HttpEntity<>(new UserDto(changedName,
+                surname,
                 LocalDateTime.of(2020, 1, 1,0,0, 0))
                 , headers);
-        response = restTemplate.exchange(createURLWithPort("/library/user/update?id=6"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/update?id=" + userId),
                 HttpMethod.PUT, entity, String.class);
-        System.out.println("response " + response);
         //Then
-        assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData()));
+        assertEquals(200, response.getStatusCodeValue());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData(changedName, surname)));
         //CleanUp
-        removeUser(6);
+        removeUser(userId);
     }
 
     private String createURLWithPort(String uri) {
         return "http://localhost:" + port + uri;
     }
 
-    private String createUserJsonData() {
-        return "{\"name\":\"Tom\",\"surname\":\"Jerry\",\"signUpDate\":\"";
+    private String createUserJsonData(String name, String surname) {
+        return "\"name\":\"" + name + "\",\"surname\":\"" + surname + "\",\"signUpDate\":\"";
     }
 
-
-    private void createUser(String name, String surname) {
-         entity = new HttpEntity<>(new UserDto(name,
+    private String createUser(String name, String surname) {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> entity = new HttpEntity<>(new UserDto(name,
                 surname,
                 LocalDateTime.of(2020, 1, 1,0,0, 0))
                 , headers);
-        response = restTemplate.exchange(createURLWithPort("/library/user/add"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/add"),
                 HttpMethod.POST, entity, String.class);
-        System.out.println("user created: " + name + " " + surname);
+        System.out.println("user created: " + name + " " + surname + ", id: " + response.getBody());
+        return response.getBody();
     }
 
-
-    private void removeUser(int id) {
-        entity = new HttpEntity<>(null, headers);
-        response = restTemplate.exchange(createURLWithPort("/library/user/delete?id=" + id),
+    private void removeUser(String id) {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> entity = new HttpEntity<>(null, headers);
+        restTemplate.exchange(createURLWithPort("/library/user/delete?id=" + id),
                 HttpMethod.DELETE, entity, String.class);
     }
 }
