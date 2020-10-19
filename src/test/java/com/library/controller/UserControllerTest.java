@@ -24,22 +24,6 @@ class UserControllerTest {
     private final TestRestTemplate restTemplate = new TestRestTemplate();
 
     @Test
-    void testGetUser() {
-        //Given
-        String name = "Jason";
-        String surname = "Testovsky";
-        String userId = createUser(name,surname);
-        //When
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<UserDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/get?id=" + userId),
-                HttpMethod.GET, entity, String.class);
-        //Then
-        assertEquals(200, response.getStatusCodeValue());
-        assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData(name, surname)));
-    }
-
-    @Test
     void testAddUser() {
         //Given
         HttpHeaders headers = new HttpHeaders();
@@ -48,12 +32,28 @@ class UserControllerTest {
                 LocalDateTime.of(1999, 1, 15,2,3, 4))
                 , headers);
         //When
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/add"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("add"),
                 HttpMethod.POST, entity, String.class);
         String userId = response.getBody();
         //Then
         assertEquals(200, response.getStatusCodeValue());
         assertNotEquals("0", userId);
+    }
+
+    @Test
+    void testGetUser() {
+        //Given
+        String name = "Jason";
+        String surname = "Testovsky";
+        String userId = createUser(name,surname);
+        //When
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("get?id=" + userId),
+                HttpMethod.GET, entity, String.class);
+        //Then
+        assertEquals(200, response.getStatusCodeValue());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData(name, surname)));
     }
 
     @Test
@@ -68,7 +68,7 @@ class UserControllerTest {
         //When
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<UserDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/getAll"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("getAll"),
                 HttpMethod.GET, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -83,7 +83,7 @@ class UserControllerTest {
         //When
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<UserDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/delete?id=" + userId),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("delete?id=" + userId),
                 HttpMethod.DELETE, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -102,7 +102,7 @@ class UserControllerTest {
                 surname,
                 LocalDateTime.of(2020, 1, 1,0,0, 0))
                 , headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/update?id=" + userId),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("update?id=" + userId),
                 HttpMethod.PUT, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -110,7 +110,7 @@ class UserControllerTest {
     }
 
     private String createURLWithPort(String uri) {
-        return "http://localhost:" + port + uri;
+        return "http://localhost:" + port + "/library/user/" + uri;
     }
 
     private String createUserJsonData(String name, String surname) {
@@ -123,7 +123,7 @@ class UserControllerTest {
                 surname,
                 LocalDateTime.of(2020, 1, 1,0,0, 0))
                 , headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/library/user/add"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("add"),
                 HttpMethod.POST, entity, String.class);
         System.out.println("user created: " + name + " " + surname + ", id: " + response.getBody());
         return response.getBody();

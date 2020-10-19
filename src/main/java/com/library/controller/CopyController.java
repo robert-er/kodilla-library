@@ -26,10 +26,10 @@ public class CopyController {
     private final CopyMapper copyMapper;
 
     @PostMapping("add")
-    public void addCopy(@RequestParam Long bookId) throws BookNotFoundException {
+    public Long addCopy(@RequestParam Long bookId) throws BookNotFoundException {
         if (bookServiceImplementation.findById(bookId).isPresent()) {
             CopyDto copyDto = new CopyDto(bookId, Copy.Status.toRent);
-            copyServiceImplementation.addNewCopy(copyMapper.mapToCopy(copyDto));
+            return copyServiceImplementation.addNewCopy(copyMapper.mapToCopy(copyDto)).getId();
         } else {
             throw new BookNotFoundException();
         }

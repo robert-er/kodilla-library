@@ -22,8 +22,8 @@ public class BookController {
     private final BookMapper bookMapper;
 
     @PostMapping("add")
-    public void addBook(@RequestBody BookDto bookDto) throws BookExistException {
-       bookServiceImplementation.addNewBook(bookMapper.mapToBook(bookDto));
+    public Long addBook(@RequestBody BookDto bookDto) throws BookExistException {
+       return bookServiceImplementation.addNewBook(bookMapper.mapToBook(bookDto)).getId();
     }
 
     @GetMapping("get")

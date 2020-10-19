@@ -27,13 +27,13 @@ public class RentalController {
     private final RentalMapper rentalMapper;
 
     @PostMapping("add")
-    public void addRental(@RequestParam Long userId,
+    public Long addRental(@RequestParam Long userId,
                           @RequestParam Long copyId)
             throws UserNotFoundException, CopyNotFoundException, RentalExistException, CopyIsBorrowedException {
         User user = userServiceImplementation.findById(userId).orElseThrow(UserNotFoundException::new);
         Copy copy = copyServiceImplementation.findById(copyId).orElseThrow(CopyNotFoundException::new);
         if (copy.getStatus() == Copy.Status.toRent) {
-            rentalServiceImplementation.addNewRental(user, copy);
+            return rentalServiceImplementation.addNewRental(user, copy).getId();
         } else {
             throw new CopyIsBorrowedException();
         }
