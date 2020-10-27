@@ -1,7 +1,6 @@
 package com.library.controller;
 
 import com.library.mapper.CopyMapper;
-import com.library.model.Book;
 import com.library.model.Copy;
 import com.library.model.dto.CopyDto;
 import com.library.service.exception.BookNotFoundException;
