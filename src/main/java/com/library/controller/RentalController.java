@@ -1,9 +1,7 @@
 package com.library.controller;
 
-import com.library.mapper.CopyMapper;
 import com.library.mapper.RentalMapper;
 import com.library.model.Copy;
-import com.library.model.Rental;
 import com.library.model.User;
 import com.library.model.dto.RentalDto;
 import com.library.service.exception.*;
