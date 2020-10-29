@@ -39,7 +39,12 @@ public class RentalServiceImplementation implements RentalService {
                         rental.getCopy(),
                         rental.getDateOfRent()
                 ).isPresent()) {
-            throw new RentalExistException();
+            throw new RentalExistException(rentalRepository
+                    .findByUserAndCopyAndDateOfRent(
+                            rental.getUser(),
+                            rental.getCopy(),
+                            rental.getDateOfRent()
+                    ).get().getId());
         }
         copy.setStatus(Copy.Status.rented);
         return save(rental);
@@ -56,7 +61,7 @@ public class RentalServiceImplementation implements RentalService {
             rental.getCopy().setStatus(Copy.Status.toRent);
             return rental;
         } else {
-            throw new RentalNotFoundException();
+            throw new RentalNotFoundException(rental.getId());
         }
     }
 
@@ -70,7 +75,7 @@ public class RentalServiceImplementation implements RentalService {
                 ).isPresent()) {
             rental.setDateOfReturn(returnDate);
         } else {
-            throw new RentalNotFoundException();
+            throw new RentalNotFoundException(rental.getId());
         }
     }
 
@@ -79,7 +84,7 @@ public class RentalServiceImplementation implements RentalService {
         if (findById(id).isPresent()) {
             rentalRepository.deleteById(id);
         } else {
-            throw new RentalNotFoundException();
+            throw new RentalNotFoundException(id);
         }
     }
 

@@ -27,7 +27,8 @@ public class UserServiceImplementation implements UserService {
     @Override
     public User addNewUser(User user) throws UserExistException {
         if (userRepository.findByNameAndSurname(user.getName(), user.getSurname()).isPresent()) {
-            throw new UserExistException();
+            throw new UserExistException(userRepository
+                    .findByNameAndSurname(user.getName(), user.getSurname()).get().getId());
         }
         return save(user);
     }
@@ -37,7 +38,7 @@ public class UserServiceImplementation implements UserService {
         if (findById(id).isPresent()) {
             userRepository.deleteById(id);
         } else {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException(id);
         }
     }
 

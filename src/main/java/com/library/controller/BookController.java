@@ -28,7 +28,8 @@ public class BookController {
 
     @GetMapping("get")
     public BookDto getUser(@RequestParam Long id) throws BookNotFoundException {
-        return bookMapper.mapToBookDto(bookServiceImplementation.findById(id).orElseThrow(BookNotFoundException::new));
+        return bookMapper.mapToBookDto(bookServiceImplementation.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id)));
     }
 
     @GetMapping("getAll")
@@ -51,6 +52,6 @@ public class BookController {
                     b.setYear(bookDto.getYear());
                     return bookMapper.mapToBookDto(bookServiceImplementation.save(b));
                 })
-                .orElseThrow(BookNotFoundException::new);
+                .orElseThrow(() -> new BookNotFoundException(id));
     }
 }

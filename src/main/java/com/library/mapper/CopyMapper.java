@@ -18,7 +18,8 @@ public class CopyMapper {
 
     public Copy mapToCopy(CopyDto copyDto) throws BookNotFoundException {
         Copy copy = new Copy();
-        copy.setBook(bookServiceImplementation.findById(copyDto.getBookId()).orElseThrow(BookNotFoundException::new));
+        copy.setBook(bookServiceImplementation.findById(copyDto.getBookId())
+                .orElseThrow(() -> new BookNotFoundException(copyDto.getBookId())));
         copy.setStatus(copyDto.getStatus());
         return copy;
     }

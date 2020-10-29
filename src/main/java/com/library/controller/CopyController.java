@@ -30,13 +30,14 @@ public class CopyController {
             CopyDto copyDto = new CopyDto(bookId, Copy.Status.toRent);
             return copyServiceImplementation.addNewCopy(copyMapper.mapToCopy(copyDto)).getId();
         } else {
-            throw new BookNotFoundException();
+            throw new BookNotFoundException(bookId);
         }
     }
 
     @GetMapping("get")
     public CopyDto getCopy(@RequestParam Long id) throws CopyNotFoundException {
-        return copyMapper.mapToCopyDto(copyServiceImplementation.findById(id).orElseThrow(CopyNotFoundException::new));
+        return copyMapper.mapToCopyDto(copyServiceImplementation.findById(id)
+                .orElseThrow(() -> new CopyNotFoundException(id)));
     }
 
     @GetMapping("getAll")
@@ -56,13 +57,14 @@ public class CopyController {
         return copyServiceImplementation.findById(id)
                 .map(c -> {
                     try {
-                        c.setBook(bookServiceImplementation.findById(copyDto.getBookId()).orElseThrow(BookNotFoundException::new));
+                        c.setBook(bookServiceImplementation.findById(copyDto.getBookId())
+                                .orElseThrow(() -> new BookNotFoundException(copyDto.getBookId())));
                     } catch (BookNotFoundException e) {
                         e.printStackTrace();
                     }
                     c.setStatus(copyDto.getStatus());
                     return copyMapper.mapToCopyDto(copyServiceImplementation.save(c));
                 })
-                .orElseThrow(CopyNotFoundException::new);
+                .orElseThrow(() -> new CopyNotFoundException(id));
     }
 }

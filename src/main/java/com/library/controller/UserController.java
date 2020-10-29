@@ -30,7 +30,8 @@ public class UserController {
 
     @GetMapping("get")
     public UserDto getUser(@RequestParam Long id) throws UserNotFoundException {
-        return userMapper.mapToUserDto(userServiceImplementation.findById(id).orElseThrow(UserNotFoundException::new));
+        return userMapper.mapToUserDto(userServiceImplementation.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id)));
     }
 
     @GetMapping("getAll")
@@ -53,6 +54,6 @@ public class UserController {
                     u.setSignUpDate(userDto.getSignUpDate());
                     return userMapper.mapToUserDto(userServiceImplementation.save(u));
                 })
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }

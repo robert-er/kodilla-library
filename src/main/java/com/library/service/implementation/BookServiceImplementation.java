@@ -27,7 +27,8 @@ public class BookServiceImplementation implements BookService {
     @Override
     public Book addNewBook(Book book) throws BookExistException {
         if (bookRepository.findByAuthorAndTitleAndYear(book.getAuthor(), book.getTitle(), book.getYear()).isPresent()) {
-            throw new BookExistException();
+            throw new BookExistException(bookRepository
+                    .findByAuthorAndTitleAndYear(book.getAuthor(), book.getTitle(), book.getYear()).get().getId());
         }
         return save(book);
     }
@@ -37,7 +38,7 @@ public class BookServiceImplementation implements BookService {
         if (findById(id).isPresent()) {
             bookRepository.deleteById(id);
         } else {
-            throw new BookNotFoundException();
+            throw new BookNotFoundException(id);
         }
     }
 

@@ -2,7 +2,6 @@ package com.library.service.implementation;
 
 import com.library.model.Copy;
 import com.library.repository.CopyRepository;
-import com.library.repository.RentalRepository;
 import com.library.service.CopyService;
 import com.library.service.exception.CopyNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,7 @@ public class CopyServiceImplementation implements CopyService {
         if (findById(id).isPresent()) {
             copyRepository.deleteById(id);
         } else {
-            throw new CopyNotFoundException();
+            throw new CopyNotFoundException(id);
         }
     }
 

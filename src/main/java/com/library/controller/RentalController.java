@@ -28,18 +28,21 @@ public class RentalController {
     public Long addRental(@RequestParam Long userId,
                           @RequestParam Long copyId)
             throws UserNotFoundException, CopyNotFoundException, RentalExistException, CopyIsBorrowedException {
-        User user = userServiceImplementation.findById(userId).orElseThrow(UserNotFoundException::new);
-        Copy copy = copyServiceImplementation.findById(copyId).orElseThrow(CopyNotFoundException::new);
+        User user = userServiceImplementation.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        Copy copy = copyServiceImplementation.findById(copyId)
+                .orElseThrow(() -> new CopyNotFoundException(copyId));
         if (copy.getStatus() == Copy.Status.toRent) {
             return rentalServiceImplementation.addNewRental(user, copy).getId();
         } else {
-            throw new CopyIsBorrowedException();
+            throw new CopyIsBorrowedException(copyId);
         }
     }
 
     @GetMapping("get")
     public RentalDto getRental(@RequestParam Long id) throws RentalNotFoundException {
-        return rentalMapper.mapToRentalDto(rentalServiceImplementation.findById(id).orElseThrow(RentalNotFoundException::new));
+        return rentalMapper.mapToRentalDto(rentalServiceImplementation.findById(id)
+                .orElseThrow(() -> new RentalNotFoundException(id)));
     }
 
     @GetMapping("getAll")
@@ -50,14 +53,15 @@ public class RentalController {
     @DeleteMapping("delete")
     public void deleteRental(@RequestParam Long id) throws RentalNotFoundException, CopyNotFoundException {
         copyServiceImplementation.findById(rentalServiceImplementation.findById(id)
-                .orElseThrow(RentalNotFoundException::new)
+                .orElseThrow(() -> new RentalNotFoundException(id))
                 .getCopy()
                 .getId())
                 .map(cp -> {
                     cp.setStatus(Copy.Status.toRent);
                     return copyServiceImplementation.save(cp);
                         }
-                ).orElseThrow(CopyNotFoundException::new);
+                ).orElseThrow(() -> new CopyNotFoundException(rentalServiceImplementation.findById(id)
+                .get().getCopy().getId()));
 
         rentalServiceImplementation.deleteById(id);
     }
@@ -67,10 +71,10 @@ public class RentalController {
             throws RentalNotFoundException, UserNotFoundException,
             CopyNotFoundException, RentalExistException, CopyIsBorrowedException {
         if (!userServiceImplementation.findById(rentalDto.getUserId()).isPresent()) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException(rentalDto.getUserId());
         }
         if (!copyServiceImplementation.findById(rentalDto.getCopyId()).isPresent()) {
-            throw new CopyNotFoundException();
+            throw new CopyNotFoundException(id);
         }
 
         deleteRental(id);

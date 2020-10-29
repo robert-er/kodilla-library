@@ -21,8 +21,10 @@ public class RentalMapper {
 
     public Rental mapToRental(RentalDto rentalDto) throws UserNotFoundException, CopyNotFoundException {
         Rental rental = new Rental();
-        rental.setUser(userServiceImplementation.findById(rentalDto.getUserId()).orElseThrow(UserNotFoundException::new));
-        rental.setCopy(copyServiceImplementation.findById(rentalDto.getCopyId()).orElseThrow(CopyNotFoundException::new));
+        rental.setUser(userServiceImplementation.findById(rentalDto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(rentalDto.getUserId())));
+        rental.setCopy(copyServiceImplementation.findById(rentalDto.getCopyId())
+                .orElseThrow(() -> new CopyNotFoundException(rentalDto.getCopyId())));
         rental.setDateOfRent(rentalDto.getDateOfRent());
         rental.setDateOfReturn(rentalDto.getDateOfReturn());
         return rental;
