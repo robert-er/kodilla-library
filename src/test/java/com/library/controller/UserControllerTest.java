@@ -38,6 +38,8 @@ class UserControllerTest {
         //Then
         assertEquals(200, response.getStatusCodeValue());
         assertNotEquals("0", userId);
+        //CleanUp
+        removeUser(userId);
     }
 
     @Test
@@ -54,6 +56,8 @@ class UserControllerTest {
         //Then
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData(name, surname)));
+        //CleanUp
+        removeUser(userId);
     }
 
     @Test
@@ -63,8 +67,8 @@ class UserControllerTest {
         String user1surname = "Smith";
         String user2name = "Edvard";
         String user2surname = "Norton";
-        createUser(user1name, user1surname);
-        createUser(user2name, user2surname);
+        String userId1 = createUser(user1name, user1surname);
+        String userId2 = createUser(user2name, user2surname);
         //When
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<UserDto> entity = new HttpEntity<>(null, headers);
@@ -74,6 +78,9 @@ class UserControllerTest {
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData(user1name, user1surname)));
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData(user2name, user2surname)));
+        //CleanUp
+        removeUser(userId1);
+        removeUser(userId2);
     }
 
     @Test
@@ -107,6 +114,8 @@ class UserControllerTest {
         //Then
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createUserJsonData(changedName, surname)));
+        //CleanUp
+        removeUser(userId);
     }
 
     private String createURLWithPort(String uri) {
@@ -127,5 +136,12 @@ class UserControllerTest {
                 HttpMethod.POST, entity, String.class);
         System.out.println("user created: " + name + " " + surname + ", id: " + response.getBody());
         return response.getBody();
+    }
+
+    private void removeUser(String id) {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> entity = new HttpEntity<>(null, headers);
+        restTemplate.exchange(createURLWithPort("delete?id=" + id),
+                HttpMethod.DELETE, entity, String.class);
     }
 }

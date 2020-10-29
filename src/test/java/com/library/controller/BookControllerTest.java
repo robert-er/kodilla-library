@@ -34,6 +34,8 @@ class BookControllerTest {
         //Then
         assertEquals(200, response.getStatusCodeValue());
         assertNotEquals("0", bookId);
+        //CleanUp
+        removeBook(bookId);
     }
 
     @Test
@@ -51,6 +53,8 @@ class BookControllerTest {
         //Then
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createBookJsonData(author, title, year)));
+        //CleanUp
+        removeBook(bookId);
     }
 
     @Test
@@ -62,8 +66,8 @@ class BookControllerTest {
         String author2 = "GetAllBookAuthor2";
         String title2 = "GetAllBookTitle2";
         int year2 = 1666;
-        createBook(author1, title1, year1);
-        createBook(author2, title2, year2);
+        String bookId1 = createBook(author1, title1, year1);
+        String bookId2 = createBook(author2, title2, year2);
         //When
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
@@ -73,6 +77,9 @@ class BookControllerTest {
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createBookJsonData(author1, title1, year1)));
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createBookJsonData(author1, title1, year1)));
+        //CleanUp
+        removeBook(bookId1);
+        removeBook(bookId2);
     }
 
     @Test
@@ -109,6 +116,8 @@ class BookControllerTest {
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody())
                 .contains(createBookJsonData(updatedAuthor, updatedTitle, updatedYear)));
+        //CleanUp
+        removeBook(bookId);
     }
 
     private String createURLWithPort(String uri) {
@@ -126,5 +135,12 @@ class BookControllerTest {
                 HttpMethod.POST, entity, String.class);
         System.out.println("book created: " + author + " " + title + ", " + year + ", id: " + response.getBody());
         return response.getBody();
+    }
+
+    private void removeBook(String id) {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("delete?id=" + id),
+                HttpMethod.DELETE, entity, String.class);
     }
 }

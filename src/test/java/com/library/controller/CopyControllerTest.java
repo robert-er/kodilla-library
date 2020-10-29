@@ -38,6 +38,8 @@ class CopyControllerTest {
         //Then
         assertEquals(200, response.getStatusCodeValue());
         assertNotEquals("0", copyId);
+        //CleanUp
+        removeBook(bookId);
     }
 
     @Test
@@ -57,6 +59,8 @@ class CopyControllerTest {
         //Then
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createCopyJsonData(bookId)));
+        //CleanUp
+        removeBook(bookId);
     }
 
     @Test
@@ -81,6 +85,9 @@ class CopyControllerTest {
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createCopyJsonData(book1Id)));
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createCopyJsonData(book2Id)));
+        //CleanUp
+        removeBook(book1Id);
+        removeBook(book2Id);
     }
 
     @Test
@@ -89,7 +96,8 @@ class CopyControllerTest {
         String author = "AuthorDeleteBook";
         String title = "TitleDeleteBook";
         int year = 1888;
-        String copyId = createCopy(createBook(author, title, year));
+        String bookId = createBook(author, title, year);
+        String copyId = createCopy(bookId);
         //When
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<CopyDto> entity = new HttpEntity<>(null, headers);
@@ -98,6 +106,8 @@ class CopyControllerTest {
                 HttpMethod.DELETE, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
+        //CleanUp
+        removeBook(bookId);
     }
 
     @Test
@@ -122,6 +132,9 @@ class CopyControllerTest {
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody())
                 .contains(createCopyJsonData(book2Id)));
+        //CleanUp
+        removeBook(book1Id);
+        removeBook(book2Id);
     }
 
     private String createURLWithPort(String controller, String uri) {
@@ -148,5 +161,12 @@ class CopyControllerTest {
                 HttpMethod.POST, entity, String.class);
         System.out.println("book created: " + author + " " + title + ", " + year + ", id: " + response.getBody());
         return response.getBody();
+    }
+
+    private void removeBook(String id) {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("book", "delete?id=" + id),
+                HttpMethod.DELETE, entity, String.class);
     }
 }

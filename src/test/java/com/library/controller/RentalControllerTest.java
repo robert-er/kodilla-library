@@ -43,6 +43,9 @@ class RentalControllerTest {
         //Then
         assertEquals(200, response.getStatusCodeValue());
         assertNotEquals("0", rentalId);
+        //CleanUp
+        removeBook(bookId);
+        removeUser(userId);
     }
 
     @Test
@@ -61,6 +64,9 @@ class RentalControllerTest {
         //Then
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createRentalJsonData(userId, copyId)));
+        //CleanUp
+        removeBook(bookId);
+        removeUser(userId);
     }
 
     @Test
@@ -83,6 +89,11 @@ class RentalControllerTest {
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createRentalJsonData(user1Id, copy1Id)));
         assertTrue(Objects.requireNonNull(response.getBody()).contains(createRentalJsonData(user2Id, copy2Id)));
+        //CleanUp
+        removeBook(book1Id);
+        removeUser(user1Id);
+        removeBook(book2Id);
+        removeUser(user2Id);
     }
 
     @Test
@@ -100,6 +111,9 @@ class RentalControllerTest {
                         HttpMethod.DELETE, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
+        //CleanUp
+        removeBook(bookId);
+        removeUser(userId);
     }
 
     @Test
@@ -125,6 +139,10 @@ class RentalControllerTest {
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(Objects.requireNonNull(response.getBody())
                 .contains(createRentalJsonData(userId, copy2Id)));
+        //CleanUp
+        removeBook(book1Id);
+        removeUser(userId);
+        removeBook(book2Id);
     }
 
     private String createURLWithPort(String controller, String uri) {
@@ -172,5 +190,19 @@ class RentalControllerTest {
                 .exchange(createURLWithPort("rental", "add?userId=") + userId + "&copyId=" + copyId,
                         HttpMethod.POST, entity, String.class);
         return response.getBody();
+    }
+
+    private void removeBook(String id) {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("book", "delete?id=" + id),
+                HttpMethod.DELETE, entity, String.class);
+    }
+
+    private void removeUser(String id) {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("user", "delete?id=" + id),
+                HttpMethod.DELETE, entity, String.class);
     }
 }
