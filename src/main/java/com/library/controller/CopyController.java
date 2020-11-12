@@ -24,7 +24,7 @@ public class CopyController {
     private final RentalServiceImplementation rentalServiceImplementation;
     private final CopyMapper copyMapper;
 
-    @PostMapping("add")
+    @PostMapping
     public Long addCopy(@RequestParam Long bookId) throws BookNotFoundException {
         if (bookServiceImplementation.findById(bookId).isPresent()) {
             CopyDto copyDto = new CopyDto(bookId, Copy.Status.toRent);
@@ -34,25 +34,25 @@ public class CopyController {
         }
     }
 
-    @GetMapping("get")
-    public CopyDto getCopy(@RequestParam Long id) throws CopyNotFoundException {
+    @GetMapping("{id}")
+    public CopyDto getCopy(@PathVariable Long id) throws CopyNotFoundException {
         return copyMapper.mapToCopyDto(copyServiceImplementation.findById(id)
                 .orElseThrow(() -> new CopyNotFoundException(id)));
     }
 
-    @GetMapping("getAll")
+    @GetMapping
     public List<CopyDto> getAll() {
         return copyMapper.mapToCopyDtoList(copyServiceImplementation.getAll());
     }
 
-    @DeleteMapping("delete")
-    public void deleteCopy(@RequestParam Long id) throws CopyNotFoundException {
+    @DeleteMapping("{id}")
+    public void deleteCopy(@PathVariable Long id) throws CopyNotFoundException {
         rentalServiceImplementation.deleteByCopyId(id);
         copyServiceImplementation.deleteById(id);
     }
 
-    @PutMapping("update")
-    public CopyDto updateCopy(@RequestParam Long id,
+    @PutMapping("{id}")
+    public CopyDto updateCopy(@PathVariable Long id,
                               @RequestBody CopyDto copyDto) throws CopyNotFoundException {
         return copyServiceImplementation.findById(id)
                 .map(c -> {

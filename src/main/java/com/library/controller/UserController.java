@@ -22,31 +22,31 @@ public class UserController {
     private final RentalServiceImplementation rentalServiceImplementation;
     private final UserMapper userMapper;
 
-    @PostMapping("add")
+    @PostMapping
     public Long addUser(@RequestBody UserDto userDto) throws UserExistException {
         userDto.setSignUpDate(LocalDateTime.now());
         return userServiceImplementation.addNewUser(userMapper.mapToUser(userDto)).getId();
     }
 
-    @GetMapping("get")
-    public UserDto getUser(@RequestParam Long id) throws UserNotFoundException {
+    @GetMapping("{id}")
+    public UserDto getUser(@PathVariable Long id) throws UserNotFoundException {
         return userMapper.mapToUserDto(userServiceImplementation.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id)));
     }
 
-    @GetMapping("getAll")
+    @GetMapping
     public List<UserDto> getAll() {
         return userMapper.mapToUserDtoList(userServiceImplementation.getAll());
     }
 
-    @DeleteMapping("delete")
-    public void deleteUser(@RequestParam Long id) throws UserNotFoundException {
+    @DeleteMapping("{id}")
+    public void deleteUser(@PathVariable Long id) throws UserNotFoundException {
         rentalServiceImplementation.deleteByUserId(id);
         userServiceImplementation.deleteById(id);
     }
 
-    @PutMapping("update")
-    public UserDto updateUser(@RequestParam Long id, @RequestBody UserDto userDto) throws UserNotFoundException {
+    @PutMapping("{id}")
+    public UserDto updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException {
         return userServiceImplementation.findById(id)
                 .map(u -> {
                     u.setName(userDto.getName());

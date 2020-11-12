@@ -24,7 +24,7 @@ public class RentalController {
     private final CopyServiceImplementation copyServiceImplementation;
     private final RentalMapper rentalMapper;
 
-    @PostMapping("add")
+    @PostMapping
     public Long addRental(@RequestParam Long userId,
                           @RequestParam Long copyId)
             throws UserNotFoundException, CopyNotFoundException, RentalExistException, CopyIsBorrowedException {
@@ -39,19 +39,19 @@ public class RentalController {
         }
     }
 
-    @GetMapping("get")
-    public RentalDto getRental(@RequestParam Long id) throws RentalNotFoundException {
+    @GetMapping("{id}")
+    public RentalDto getRental(@PathVariable Long id) throws RentalNotFoundException {
         return rentalMapper.mapToRentalDto(rentalServiceImplementation.findById(id)
                 .orElseThrow(() -> new RentalNotFoundException(id)));
     }
 
-    @GetMapping("getAll")
+    @GetMapping
     public List<RentalDto> getAll() {
         return rentalMapper.mapToRentalDtoList(rentalServiceImplementation.getAll());
     }
 
-    @DeleteMapping("delete")
-    public void deleteRental(@RequestParam Long id) throws RentalNotFoundException, CopyNotFoundException {
+    @DeleteMapping("{id}")
+    public void deleteRental(@PathVariable Long id) throws RentalNotFoundException, CopyNotFoundException {
         copyServiceImplementation.findById(rentalServiceImplementation.findById(id)
                 .orElseThrow(() -> new RentalNotFoundException(id))
                 .getCopy()
@@ -66,8 +66,8 @@ public class RentalController {
         rentalServiceImplementation.deleteById(id);
     }
 
-    @PutMapping("update")
-    public RentalDto updateRental(@RequestParam Long id, @RequestBody RentalDto rentalDto)
+    @PutMapping("{id}")
+    public RentalDto updateRental(@PathVariable Long id, @RequestBody RentalDto rentalDto)
             throws RentalNotFoundException, UserNotFoundException,
             CopyNotFoundException, RentalExistException, CopyIsBorrowedException {
         if (!userServiceImplementation.findById(rentalDto.getUserId()).isPresent()) {

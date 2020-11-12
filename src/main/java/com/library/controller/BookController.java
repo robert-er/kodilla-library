@@ -21,30 +21,30 @@ public class BookController {
     private final CopyServiceImplementation copyServiceImplementation;
     private final BookMapper bookMapper;
 
-    @PostMapping("add")
+    @PostMapping
     public Long addBook(@RequestBody BookDto bookDto) throws BookExistException {
        return bookServiceImplementation.addNewBook(bookMapper.mapToBook(bookDto)).getId();
     }
 
-    @GetMapping("get")
-    public BookDto getUser(@RequestParam Long id) throws BookNotFoundException {
+    @GetMapping("{id}")
+    public BookDto getUser(@PathVariable Long id) throws BookNotFoundException {
         return bookMapper.mapToBookDto(bookServiceImplementation.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id)));
     }
 
-    @GetMapping("getAll")
+    @GetMapping
     public List<BookDto> getAll() {
         return bookMapper.mapToBookDtoList(bookServiceImplementation.getAll());
     }
 
-    @DeleteMapping("delete")
-    public void deleteBook(@RequestParam Long id) throws BookNotFoundException {
+    @DeleteMapping("{id}")
+    public void deleteBook(@PathVariable Long id) throws BookNotFoundException {
         copyServiceImplementation.deleteByBookId(id);
         bookServiceImplementation.deleteById(id);
     }
 
-    @PutMapping("update")
-    public BookDto updateBook(@RequestParam Long id, @RequestBody BookDto bookDto) throws BookNotFoundException {
+    @PutMapping("{id}")
+    public BookDto updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) throws BookNotFoundException {
         return bookServiceImplementation.findById(id)
                 .map(b -> {
                     b.setAuthor(bookDto.getAuthor());
