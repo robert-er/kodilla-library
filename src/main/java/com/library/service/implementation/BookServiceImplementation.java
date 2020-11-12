@@ -8,7 +8,6 @@ import com.library.service.exception.BookNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookServiceImplementation implements BookService {
@@ -35,11 +34,8 @@ public class BookServiceImplementation implements BookService {
 
     @Override
     public void deleteById(Long id) throws BookNotFoundException {
-        if (findById(id).isPresent()) {
-            bookRepository.deleteById(id);
-        } else {
-            throw new BookNotFoundException(id);
-        }
+        findById(id);
+        bookRepository.deleteById(id);
     }
 
     @Override
@@ -48,7 +44,7 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
-    public Optional<Book> findById(Long id) {
-        return bookRepository.findById(id);
+    public Book findById(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
 }

@@ -2,8 +2,6 @@ package com.library.mapper;
 
 import com.library.model.Rental;
 import com.library.model.dto.RentalDto;
-import com.library.service.exception.CopyNotFoundException;
-import com.library.service.exception.UserNotFoundException;
 import com.library.service.implementation.CopyServiceImplementation;
 import com.library.service.implementation.UserServiceImplementation;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +17,10 @@ public class RentalMapper {
     private final UserServiceImplementation userServiceImplementation;
     private final CopyServiceImplementation copyServiceImplementation;
 
-    public Rental mapToRental(RentalDto rentalDto) throws UserNotFoundException, CopyNotFoundException {
+    public Rental mapToRental(RentalDto rentalDto) {
         Rental rental = new Rental();
-        rental.setUser(userServiceImplementation.findById(rentalDto.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(rentalDto.getUserId())));
-        rental.setCopy(copyServiceImplementation.findById(rentalDto.getCopyId())
-                .orElseThrow(() -> new CopyNotFoundException(rentalDto.getCopyId())));
+        rental.setUser(userServiceImplementation.findById(rentalDto.getUserId()));
+        rental.setCopy(copyServiceImplementation.findById(rentalDto.getCopyId()));
         rental.setDateOfRent(rentalDto.getDateOfRent());
         rental.setDateOfReturn(rentalDto.getDateOfReturn());
         return rental;

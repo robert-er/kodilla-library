@@ -1,9 +1,8 @@
 package com.library.controller;
 
 import com.library.mapper.BookMapper;
+import com.library.model.Book;
 import com.library.model.dto.BookDto;
-import com.library.service.exception.BookExistException;
-import com.library.service.exception.BookNotFoundException;
 import com.library.service.implementation.BookServiceImplementation;
 import com.library.service.implementation.CopyServiceImplementation;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +21,13 @@ public class BookController {
     private final BookMapper bookMapper;
 
     @PostMapping
-    public Long addBook(@RequestBody BookDto bookDto) throws BookExistException {
+    public Long addBook(@RequestBody BookDto bookDto) {
        return bookServiceImplementation.addNewBook(bookMapper.mapToBook(bookDto)).getId();
     }
 
     @GetMapping("{id}")
-    public BookDto getUser(@PathVariable Long id) throws BookNotFoundException {
-        return bookMapper.mapToBookDto(bookServiceImplementation.findById(id)
-                .orElseThrow(() -> new BookNotFoundException(id)));
+    public BookDto getUser(@PathVariable Long id) {
+        return bookMapper.mapToBookDto(bookServiceImplementation.findById(id));
     }
 
     @GetMapping
@@ -38,20 +36,17 @@ public class BookController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteBook(@PathVariable Long id) throws BookNotFoundException {
+    public void deleteBook(@PathVariable Long id) {
         copyServiceImplementation.deleteByBookId(id);
         bookServiceImplementation.deleteById(id);
     }
 
     @PutMapping("{id}")
-    public BookDto updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) throws BookNotFoundException {
-        return bookServiceImplementation.findById(id)
-                .map(b -> {
-                    b.setAuthor(bookDto.getAuthor());
-                    b.setTitle(bookDto.getTitle());
-                    b.setYear(bookDto.getYear());
-                    return bookMapper.mapToBookDto(bookServiceImplementation.save(b));
-                })
-                .orElseThrow(() -> new BookNotFoundException(id));
+    public BookDto updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
+        Book book = bookServiceImplementation.findById(id);
+        book.setAuthor(bookDto.getAuthor());
+        book.setTitle(bookDto.getTitle());
+        book.setYear(bookDto.getYear());
+        return bookMapper.mapToBookDto(bookServiceImplementation.save(book));
     }
 }

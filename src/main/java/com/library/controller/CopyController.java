@@ -3,8 +3,6 @@ package com.library.controller;
 import com.library.mapper.CopyMapper;
 import com.library.model.Copy;
 import com.library.model.dto.CopyDto;
-import com.library.service.exception.BookNotFoundException;
-import com.library.service.exception.CopyNotFoundException;
 import com.library.service.implementation.BookServiceImplementation;
 import com.library.service.implementation.CopyServiceImplementation;
 import com.library.service.implementation.RentalServiceImplementation;
@@ -25,19 +23,15 @@ public class CopyController {
     private final CopyMapper copyMapper;
 
     @PostMapping
-    public Long addCopy(@RequestParam Long bookId) throws BookNotFoundException {
-        if (bookServiceImplementation.findById(bookId).isPresent()) {
-            CopyDto copyDto = new CopyDto(bookId, Copy.Status.toRent);
-            return copyServiceImplementation.addNewCopy(copyMapper.mapToCopy(copyDto)).getId();
-        } else {
-            throw new BookNotFoundException(bookId);
-        }
+    public Long addCopy(@RequestParam Long bookId) {
+        bookServiceImplementation.findById(bookId);
+        CopyDto copyDto = new CopyDto(bookId, Copy.Status.toRent);
+        return copyServiceImplementation.addNewCopy(copyMapper.mapToCopy(copyDto)).getId();
     }
 
     @GetMapping("{id}")
-    public CopyDto getCopy(@PathVariable Long id) throws CopyNotFoundException {
-        return copyMapper.mapToCopyDto(copyServiceImplementation.findById(id)
-                .orElseThrow(() -> new CopyNotFoundException(id)));
+    public CopyDto getCopy(@PathVariable Long id) {
+        return copyMapper.mapToCopyDto(copyServiceImplementation.findById(id));
     }
 
     @GetMapping
@@ -46,25 +40,17 @@ public class CopyController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteCopy(@PathVariable Long id) throws CopyNotFoundException {
+    public void deleteCopy(@PathVariable Long id) {
         rentalServiceImplementation.deleteByCopyId(id);
         copyServiceImplementation.deleteById(id);
     }
 
     @PutMapping("{id}")
     public CopyDto updateCopy(@PathVariable Long id,
-                              @RequestBody CopyDto copyDto) throws CopyNotFoundException {
-        return copyServiceImplementation.findById(id)
-                .map(c -> {
-                    try {
-                        c.setBook(bookServiceImplementation.findById(copyDto.getBookId())
-                                .orElseThrow(() -> new BookNotFoundException(copyDto.getBookId())));
-                    } catch (BookNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    c.setStatus(copyDto.getStatus());
-                    return copyMapper.mapToCopyDto(copyServiceImplementation.save(c));
-                })
-                .orElseThrow(() -> new CopyNotFoundException(id));
+                              @RequestBody CopyDto copyDto) {
+        CopyDto copyDtoToUpdate = copyMapper.mapToCopyDto(copyServiceImplementation.findById(id));
+        copyDtoToUpdate.setBookId(copyDto.getBookId());
+        copyDtoToUpdate.setStatus(copyDto.getStatus());
+        return copyMapper.mapToCopyDto(copyServiceImplementation.save(copyMapper.mapToCopy(copyDtoToUpdate)));
     }
 }

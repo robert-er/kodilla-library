@@ -1,9 +1,8 @@
 package com.library.controller;
 
 import com.library.mapper.UserMapper;
+import com.library.model.User;
 import com.library.model.dto.UserDto;
-import com.library.service.exception.UserExistException;
-import com.library.service.exception.UserNotFoundException;
 import com.library.service.implementation.RentalServiceImplementation;
 import com.library.service.implementation.UserServiceImplementation;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +22,14 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
-    public Long addUser(@RequestBody UserDto userDto) throws UserExistException {
+    public Long addUser(@RequestBody UserDto userDto) {
         userDto.setSignUpDate(LocalDateTime.now());
         return userServiceImplementation.addNewUser(userMapper.mapToUser(userDto)).getId();
     }
 
     @GetMapping("{id}")
-    public UserDto getUser(@PathVariable Long id) throws UserNotFoundException {
-        return userMapper.mapToUserDto(userServiceImplementation.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id)));
+    public UserDto getUser(@PathVariable Long id) {
+        return userMapper.mapToUserDto(userServiceImplementation.findById(id));
     }
 
     @GetMapping
@@ -40,20 +38,17 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteUser(@PathVariable Long id) throws UserNotFoundException {
+    public void deleteUser(@PathVariable Long id) {
         rentalServiceImplementation.deleteByUserId(id);
         userServiceImplementation.deleteById(id);
     }
 
     @PutMapping("{id}")
-    public UserDto updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException {
-        return userServiceImplementation.findById(id)
-                .map(u -> {
-                    u.setName(userDto.getName());
-                    u.setSurname(userDto.getSurname());
-                    u.setSignUpDate(userDto.getSignUpDate());
-                    return userMapper.mapToUserDto(userServiceImplementation.save(u));
-                })
-                .orElseThrow(() -> new UserNotFoundException(id));
+    public UserDto updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+        User user = userServiceImplementation.findById(id);
+        user.setName(userDto.getName());
+        user.setSurname(userDto.getSurname());
+        user.setSignUpDate(userDto.getSignUpDate());
+        return userMapper.mapToUserDto(userServiceImplementation.save(user));
     }
 }

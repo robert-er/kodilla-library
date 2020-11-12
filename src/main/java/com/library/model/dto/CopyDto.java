@@ -1,9 +1,11 @@
 package com.library.model.dto;
 
 import com.library.model.Copy;;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Value
+@Data
+@AllArgsConstructor
 public class CopyDto {
 
     Long bookId;

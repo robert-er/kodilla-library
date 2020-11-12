@@ -13,6 +13,6 @@ public interface BookService {
     Book addNewBook(Book book) throws BookExistException;
     void deleteById(Long id) throws BookNotFoundException;
     List<Book> getAll();
-    Optional<Book> findById(Long id);
+    Book findById(Long id);
 
 }

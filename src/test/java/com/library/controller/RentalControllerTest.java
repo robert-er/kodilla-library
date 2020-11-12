@@ -1,6 +1,5 @@
 package com.library.controller;
 
-import com.library.model.Copy;
 import com.library.model.dto.BookDto;
 import com.library.model.dto.CopyDto;
 import com.library.model.dto.RentalDto;
@@ -37,7 +36,7 @@ class RentalControllerTest {
         HttpEntity<RentalDto> entity = new HttpEntity<>(null, headers);
         //When
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("rental", "add?userId=") + userId + "&copyId=" + copyId,
+                .exchange(createURLWithPort("rental", "?userId=" + userId + "&copyId=" + copyId),
                         HttpMethod.POST, entity, String.class);
         String rentalId = response.getBody();
         //Then
@@ -59,7 +58,7 @@ class RentalControllerTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<RentalDto> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("rental", "get?id=") + rentalId,
+                .exchange(createURLWithPort("rental", "" + rentalId),
                         HttpMethod.GET, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -83,7 +82,7 @@ class RentalControllerTest {
         //When
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<RentalDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("rental", "getAll"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("rental", ""),
                 HttpMethod.GET, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -107,7 +106,7 @@ class RentalControllerTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<RentalDto> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("rental", "delete?id=") + rentalId,
+                .exchange(createURLWithPort("rental", "" + rentalId),
                         HttpMethod.DELETE, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -133,7 +132,7 @@ class RentalControllerTest {
                 LocalDateTime.now().plusDays(28)),
                 headers);
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("rental", "update?id=") + rentalId,
+                .exchange(createURLWithPort("rental", "" + rentalId),
                         HttpMethod.PUT, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -159,7 +158,7 @@ class RentalControllerTest {
                 surname,
                 LocalDateTime.of(2020, 1, 1,0,0, 0))
                 , headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("user", "add"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("user", ""),
                 HttpMethod.POST, entity, String.class);
         System.out.println("user created: " + name + " " + surname + ", id: " + response.getBody());
         return response.getBody();
@@ -169,7 +168,7 @@ class RentalControllerTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<CopyDto> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("copy", "add?bookId=") + bookId,
+                .exchange(createURLWithPort("copy", "?bookId=" + bookId),
                         HttpMethod.POST, entity, String.class);
         return response.getBody();
     }
@@ -177,7 +176,7 @@ class RentalControllerTest {
     private String createBook(String author, String title, int year) {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(new BookDto(author, title, year), headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("book", "add"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("book", ""),
                 HttpMethod.POST, entity, String.class);
         System.out.println("book created: " + author + " " + title + ", " + year + ", id: " + response.getBody());
         return response.getBody();
@@ -187,7 +186,7 @@ class RentalControllerTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<CopyDto> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("rental", "add?userId=") + userId + "&copyId=" + copyId,
+                .exchange(createURLWithPort("rental", "?userId=" + userId + "&copyId=" + copyId),
                         HttpMethod.POST, entity, String.class);
         return response.getBody();
     }
@@ -195,14 +194,14 @@ class RentalControllerTest {
     private void removeBook(String id) {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("book", "delete?id=" + id),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("book", "" + id),
                 HttpMethod.DELETE, entity, String.class);
     }
 
     private void removeUser(String id) {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("user", "delete?id=" + id),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("user", "" + id),
                 HttpMethod.DELETE, entity, String.class);
     }
 }

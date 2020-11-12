@@ -18,7 +18,7 @@ public interface RentalService {
     void extendReturnDate(Rental rental, LocalDateTime returnDate) throws RentalNotFoundException;
     void deleteById(Long id) throws RentalNotFoundException;
     List<Rental> getAll();
-    Optional<Rental> findById(Long id);
+    Rental findById(Long id);
     void deleteByUserId(Long userId);
     void deleteByCopyId(Long copyId);
 

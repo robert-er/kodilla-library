@@ -81,11 +81,8 @@ public class RentalServiceImplementation implements RentalService {
 
     @Override
     public void deleteById(Long id) throws RentalNotFoundException {
-        if (findById(id).isPresent()) {
-            rentalRepository.deleteById(id);
-        } else {
-            throw new RentalNotFoundException(id);
-        }
+        findById(id);
+        rentalRepository.deleteById(id);
     }
 
     @Override
@@ -94,8 +91,8 @@ public class RentalServiceImplementation implements RentalService {
     }
 
     @Override
-    public Optional<Rental> findById(Long id) {
-        return rentalRepository.findById(id);
+    public Rental findById(Long id) {
+        return rentalRepository.findById(id).orElseThrow(() -> new RentalNotFoundException(id));
     }
 
     @Override

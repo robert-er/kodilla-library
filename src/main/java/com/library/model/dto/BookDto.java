@@ -1,8 +1,10 @@
 package com.library.model.dto;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Value
+@Data
+@AllArgsConstructor
 public class BookDto {
 
     String author;

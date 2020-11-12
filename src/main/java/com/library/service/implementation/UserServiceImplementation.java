@@ -8,7 +8,6 @@ import com.library.service.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImplementation implements UserService {
@@ -35,11 +34,8 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public void deleteById(Long id) throws UserNotFoundException {
-        if (findById(id).isPresent()) {
-            userRepository.deleteById(id);
-        } else {
-            throw new UserNotFoundException(id);
-        }
+        findById(id);
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -48,7 +44,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 }

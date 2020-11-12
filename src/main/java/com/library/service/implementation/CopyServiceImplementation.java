@@ -30,11 +30,8 @@ public class CopyServiceImplementation implements CopyService {
 
     @Override
     public void deleteById(Long id) throws CopyNotFoundException {
-        if (findById(id).isPresent()) {
-            copyRepository.deleteById(id);
-        } else {
-            throw new CopyNotFoundException(id);
-        }
+        findById(id);
+        copyRepository.deleteById(id);
     }
 
     @Override
@@ -51,7 +48,7 @@ public class CopyServiceImplementation implements CopyService {
     }
 
     @Override
-    public Optional<Copy> findById(Long id) {
-        return copyRepository.findById(id);
+    public Copy findById(Long id) {
+        return copyRepository.findById(id).orElseThrow(() -> new CopyNotFoundException(id));
     }
 }

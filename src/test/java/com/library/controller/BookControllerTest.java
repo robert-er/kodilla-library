@@ -28,7 +28,7 @@ class BookControllerTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(new BookDto("Author", "Title", 2020), headers);
         //When
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("add"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort(""),
                 HttpMethod.POST, entity, String.class);
         String bookId = response.getBody();
         //Then
@@ -48,7 +48,7 @@ class BookControllerTest {
         //When
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("get?id=" + bookId),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("" + bookId),
                 HttpMethod.GET, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -71,7 +71,7 @@ class BookControllerTest {
         //When
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("getAll"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort(""),
                 HttpMethod.GET, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -89,7 +89,7 @@ class BookControllerTest {
         //When
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("delete?id=" + bookId),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("" + bookId),
                 HttpMethod.DELETE, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -110,7 +110,7 @@ class BookControllerTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(new BookDto(updatedAuthor, updatedTitle, updatedYear), headers);
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("update?id=" + bookId),
+                .exchange(createURLWithPort("" + bookId),
                 HttpMethod.PUT, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -131,7 +131,7 @@ class BookControllerTest {
     private String createBook(String author, String title, int year) {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(new BookDto(author, title, year), headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("add"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort(""),
                 HttpMethod.POST, entity, String.class);
         System.out.println("book created: " + author + " " + title + ", " + year + ", id: " + response.getBody());
         return response.getBody();
@@ -140,7 +140,7 @@ class BookControllerTest {
     private void removeBook(String id) {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("delete?id=" + id),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("" + id),
                 HttpMethod.DELETE, entity, String.class);
     }
 }

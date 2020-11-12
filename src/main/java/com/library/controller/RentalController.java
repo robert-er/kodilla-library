@@ -4,7 +4,7 @@ import com.library.mapper.RentalMapper;
 import com.library.model.Copy;
 import com.library.model.User;
 import com.library.model.dto.RentalDto;
-import com.library.service.exception.*;
+import com.library.service.exception.CopyIsBorrowedException;
 import com.library.service.implementation.CopyServiceImplementation;
 import com.library.service.implementation.RentalServiceImplementation;
 import com.library.service.implementation.UserServiceImplementation;
@@ -27,11 +27,9 @@ public class RentalController {
     @PostMapping
     public Long addRental(@RequestParam Long userId,
                           @RequestParam Long copyId)
-            throws UserNotFoundException, CopyNotFoundException, RentalExistException, CopyIsBorrowedException {
-        User user = userServiceImplementation.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-        Copy copy = copyServiceImplementation.findById(copyId)
-                .orElseThrow(() -> new CopyNotFoundException(copyId));
+            throws CopyIsBorrowedException {
+        User user = userServiceImplementation.findById(userId);
+        Copy copy = copyServiceImplementation.findById(copyId);
         if (copy.getStatus() == Copy.Status.toRent) {
             return rentalServiceImplementation.addNewRental(user, copy).getId();
         } else {
@@ -40,9 +38,8 @@ public class RentalController {
     }
 
     @GetMapping("{id}")
-    public RentalDto getRental(@PathVariable Long id) throws RentalNotFoundException {
-        return rentalMapper.mapToRentalDto(rentalServiceImplementation.findById(id)
-                .orElseThrow(() -> new RentalNotFoundException(id)));
+    public RentalDto getRental(@PathVariable Long id) {
+        return rentalMapper.mapToRentalDto(rentalServiceImplementation.findById(id));
     }
 
     @GetMapping
@@ -51,32 +48,17 @@ public class RentalController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteRental(@PathVariable Long id) throws RentalNotFoundException, CopyNotFoundException {
-        copyServiceImplementation.findById(rentalServiceImplementation.findById(id)
-                .orElseThrow(() -> new RentalNotFoundException(id))
-                .getCopy()
-                .getId())
-                .map(cp -> {
-                    cp.setStatus(Copy.Status.toRent);
-                    return copyServiceImplementation.save(cp);
-                        }
-                ).orElseThrow(() -> new CopyNotFoundException(rentalServiceImplementation.findById(id)
-                .get().getCopy().getId()));
-
+    public void deleteRental(@PathVariable Long id) {
+        Copy copy = copyServiceImplementation.findById(rentalServiceImplementation.findById(id).getCopy().getId());
+        copy.setStatus(Copy.Status.toRent);
+        copyServiceImplementation.save(copy);
         rentalServiceImplementation.deleteById(id);
     }
 
     @PutMapping("{id}")
-    public RentalDto updateRental(@PathVariable Long id, @RequestBody RentalDto rentalDto)
-            throws RentalNotFoundException, UserNotFoundException,
-            CopyNotFoundException, RentalExistException, CopyIsBorrowedException {
-        if (!userServiceImplementation.findById(rentalDto.getUserId()).isPresent()) {
-            throw new UserNotFoundException(rentalDto.getUserId());
-        }
-        if (!copyServiceImplementation.findById(rentalDto.getCopyId()).isPresent()) {
-            throw new CopyNotFoundException(id);
-        }
-
+    public RentalDto updateRental(@PathVariable Long id, @RequestBody RentalDto rentalDto) {
+        userServiceImplementation.findById(rentalDto.getUserId());
+        copyServiceImplementation.findById(rentalDto.getCopyId());
         deleteRental(id);
         addRental(rentalDto.getUserId(), rentalDto.getCopyId());
         return  rentalDto;

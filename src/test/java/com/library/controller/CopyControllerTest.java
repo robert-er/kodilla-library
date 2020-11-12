@@ -32,7 +32,7 @@ class CopyControllerTest {
         HttpEntity<CopyDto> entity = new HttpEntity<>(null, headers);
         //When
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("copy", "add?bookId=") + bookId,
+                .exchange(createURLWithPort("copy", "?bookId=") + bookId,
                 HttpMethod.POST, entity, String.class);
         String copyId = response.getBody();
         //Then
@@ -54,7 +54,7 @@ class CopyControllerTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("copy", "get?id=") + copyId,
+                .exchange(createURLWithPort("copy", "" + copyId),
                 HttpMethod.GET, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -79,7 +79,7 @@ class CopyControllerTest {
         //When
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<CopyDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("copy", "getAll"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("copy", ""),
                 HttpMethod.GET, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -102,7 +102,7 @@ class CopyControllerTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<CopyDto> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("copy", "delete?id=") + copyId,
+                .exchange(createURLWithPort("copy", "" + copyId),
                 HttpMethod.DELETE, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -126,7 +126,7 @@ class CopyControllerTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<CopyDto> entity = new HttpEntity<>(new CopyDto(Long.valueOf(book2Id), Copy.Status.toRent), headers);
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("copy", "update?id=") + copyId,
+                .exchange(createURLWithPort("copy", "" + copyId),
                         HttpMethod.PUT, entity, String.class);
         //Then
         assertEquals(200, response.getStatusCodeValue());
@@ -149,7 +149,7 @@ class CopyControllerTest {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<CopyDto> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate
-                .exchange(createURLWithPort("copy", "add?bookId=") + bookId,
+                .exchange(createURLWithPort("copy", "?bookId=" + bookId),
                         HttpMethod.POST, entity, String.class);
         return response.getBody();
     }
@@ -157,7 +157,7 @@ class CopyControllerTest {
     private String createBook(String author, String title, int year) {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(new BookDto(author, title, year), headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("book", "add"),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("book", ""),
                 HttpMethod.POST, entity, String.class);
         System.out.println("book created: " + author + " " + title + ", " + year + ", id: " + response.getBody());
         return response.getBody();
@@ -166,7 +166,7 @@ class CopyControllerTest {
     private void removeBook(String id) {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("book", "delete?id=" + id),
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("book", "" + id),
                 HttpMethod.DELETE, entity, String.class);
     }
 }

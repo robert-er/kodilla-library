@@ -13,6 +13,6 @@ public interface UserService {
     User addNewUser(User user) throws UserExistException;
     void deleteById(Long id) throws UserNotFoundException;
     List<User> getAll();
-    Optional<User> findById(Long id) throws UserNotFoundException;
+    User findById(Long id) throws UserNotFoundException;
 
 }
