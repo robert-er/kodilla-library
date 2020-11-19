@@ -2,21 +2,21 @@ package com.library.service.implementation;
 
 import com.library.model.User;
 import com.library.repository.UserRepository;
+import com.library.service.RentalService;
 import com.library.service.UserService;
 import com.library.service.exception.UserExistException;
 import com.library.service.exception.UserNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImplementation implements UserService {
 
     private final UserRepository userRepository;
-
-    public UserServiceImplementation(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final RentalService rentalService;
 
     @Override
     public User save(User user) {
@@ -33,8 +33,9 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public void deleteById(Long id) throws UserNotFoundException {
+    public void deleteById(Long id) {
         findById(id);
+        rentalService.deleteByUserId(id);
         userRepository.deleteById(id);
     }
 
@@ -44,7 +45,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User findById(Long id) {
+    public User findById(Long id) throws UserNotFoundException {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 }

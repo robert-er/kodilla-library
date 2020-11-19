@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -26,6 +27,9 @@ public class Copy {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @OneToMany(targetEntity = Rental.class, mappedBy = "copy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rental> rentals;
 
     public enum Status {
         toRent, rented;

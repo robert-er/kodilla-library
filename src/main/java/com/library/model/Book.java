@@ -26,8 +26,7 @@ public class Book {
     @JsonManagedReference
     @OneToMany(targetEntity = Copy.class,
             mappedBy = "book",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+            cascade = CascadeType.ALL)
     private List<Copy> copies;
 
     @Override

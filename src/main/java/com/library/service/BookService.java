@@ -5,7 +5,6 @@ import com.library.service.exception.BookExistException;
 import com.library.service.exception.BookNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BookService {
 
@@ -14,5 +13,4 @@ public interface BookService {
     void deleteById(Long id) throws BookNotFoundException;
     List<Book> getAll();
     Book findById(Long id);
-
 }

@@ -1,9 +1,9 @@
 package com.library.mapper;
 
 import com.library.model.Rental;
-import com.library.model.dto.RentalDto;
-import com.library.service.implementation.CopyServiceImplementation;
-import com.library.service.implementation.UserServiceImplementation;
+import com.library.dto.RentalDto;
+import com.library.service.CopyService;
+import com.library.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 @Component
 public class RentalMapper {
 
-    private final UserServiceImplementation userServiceImplementation;
-    private final CopyServiceImplementation copyServiceImplementation;
+    private final UserService userService;
+    private final CopyService copyService;
 
     public Rental mapToRental(RentalDto rentalDto) {
         Rental rental = new Rental();
-        rental.setUser(userServiceImplementation.findById(rentalDto.getUserId()));
-        rental.setCopy(copyServiceImplementation.findById(rentalDto.getCopyId()));
+        rental.setUser(userService.findById(rentalDto.getUserId()));
+        rental.setCopy(copyService.findById(rentalDto.getCopyId()));
         rental.setDateOfRent(rentalDto.getDateOfRent());
         rental.setDateOfReturn(rentalDto.getDateOfReturn());
         return rental;

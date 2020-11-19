@@ -1,4 +1,4 @@
-package com.library.model.dto;
+package com.library.dto;
 
 import com.library.model.Copy;;
 import lombok.AllArgsConstructor;
@@ -10,5 +10,4 @@ public class CopyDto {
 
     Long bookId;
     Copy.Status status;
-
 }

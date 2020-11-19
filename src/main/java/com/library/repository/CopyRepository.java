@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface CopyRepository extends JpaRepository<Copy, Long> {
 
     @Override
-    Copy save(Copy copy);
+    <S extends Copy>S save(S copy);
 
     @Override
     void deleteById(Long id);
@@ -23,7 +23,4 @@ public interface CopyRepository extends JpaRepository<Copy, Long> {
 
     @Transactional
     void deleteByBookId(Long id);
-
-    List<Copy> findByBookId(Long id);
-
 }

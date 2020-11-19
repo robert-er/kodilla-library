@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -21,6 +22,9 @@ public class User {
     private String name;
     private String surname;
     private LocalDateTime signUpDate;
+
+    @OneToMany(targetEntity = Rental.class, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rental> rentals;
 
     @Override
     public boolean equals(Object o) {

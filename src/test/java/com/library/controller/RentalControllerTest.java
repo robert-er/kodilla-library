@@ -1,9 +1,9 @@
 package com.library.controller;
 
-import com.library.model.dto.BookDto;
-import com.library.model.dto.CopyDto;
-import com.library.model.dto.RentalDto;
-import com.library.model.dto.UserDto;
+import com.library.dto.BookDto;
+import com.library.dto.CopyDto;
+import com.library.dto.RentalDto;
+import com.library.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;

@@ -1,6 +1,8 @@
 package com.library.service.implementation;
 
+import com.library.mapper.CopyMapper;
 import com.library.model.Copy;
+import com.library.dto.CopyDto;
 import com.library.repository.CopyRepository;
 import com.library.service.CopyService;
 import com.library.service.exception.CopyNotFoundException;
@@ -15,7 +17,13 @@ import java.util.Optional;
 public class CopyServiceImplementation implements CopyService {
 
     private final CopyRepository copyRepository;
-    private final RentalServiceImplementation rentalServiceImplementation;
+    private final CopyMapper copyMapper;
+
+    @Override
+    public Copy addNewCopy(Long bookId) {
+        CopyDto copyDto = new CopyDto(bookId, Copy.Status.toRent);
+        return save(copyMapper.mapToCopy(copyDto));
+    }
 
     @Override
     public Copy save(Copy copy) {
@@ -23,23 +31,9 @@ public class CopyServiceImplementation implements CopyService {
     }
 
     @Override
-    public Copy addNewCopy(Copy copy) {
-        copy.setStatus(Copy.Status.toRent);
-        return save(copy);
-    }
-
-    @Override
-    public void deleteById(Long id) throws CopyNotFoundException {
+    public void deleteById(Long id) {
         findById(id);
         copyRepository.deleteById(id);
-    }
-
-    @Override
-    public void deleteByBookId(Long bookId) {
-        Optional.ofNullable(bookId).ifPresent(id -> {
-            copyRepository.findByBookId(id).forEach( copy -> rentalServiceImplementation.deleteByCopyId(copy.getId()));
-            copyRepository.deleteByBookId(id);
-        });
     }
 
     @Override

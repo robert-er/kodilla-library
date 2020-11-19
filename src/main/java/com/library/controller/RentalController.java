@@ -2,12 +2,12 @@ package com.library.controller;
 
 import com.library.mapper.RentalMapper;
 import com.library.model.Copy;
+import com.library.model.Rental;
 import com.library.model.User;
-import com.library.model.dto.RentalDto;
-import com.library.service.exception.CopyIsBorrowedException;
-import com.library.service.implementation.CopyServiceImplementation;
-import com.library.service.implementation.RentalServiceImplementation;
-import com.library.service.implementation.UserServiceImplementation;
+import com.library.dto.RentalDto;
+import com.library.service.CopyService;
+import com.library.service.RentalService;
+import com.library.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,48 +19,41 @@ import java.util.List;
 @RequestMapping("/library/rental")
 public class RentalController {
 
-    private final RentalServiceImplementation rentalServiceImplementation;
-    private final UserServiceImplementation userServiceImplementation;
-    private final CopyServiceImplementation copyServiceImplementation;
+    private final RentalService rentalService;
+    private final UserService userService;
+    private final CopyService copyService;
     private final RentalMapper rentalMapper;
 
     @PostMapping
-    public Long addRental(@RequestParam Long userId,
-                          @RequestParam Long copyId)
-            throws CopyIsBorrowedException {
-        User user = userServiceImplementation.findById(userId);
-        Copy copy = copyServiceImplementation.findById(copyId);
-        if (copy.getStatus() == Copy.Status.toRent) {
-            return rentalServiceImplementation.addNewRental(user, copy).getId();
-        } else {
-            throw new CopyIsBorrowedException(copyId);
-        }
+    public Long addRental(@RequestParam Long userId, @RequestParam Long copyId) {
+        return rentalService.addNewRental(userId, copyId).getId();
     }
 
     @GetMapping("{id}")
     public RentalDto getRental(@PathVariable Long id) {
-        return rentalMapper.mapToRentalDto(rentalServiceImplementation.findById(id));
+        return rentalMapper.mapToRentalDto(rentalService.findById(id));
     }
 
     @GetMapping
     public List<RentalDto> getAll() {
-        return rentalMapper.mapToRentalDtoList(rentalServiceImplementation.getAll());
+        return rentalMapper.mapToRentalDtoList(rentalService.getAll());
     }
 
     @DeleteMapping("{id}")
     public void deleteRental(@PathVariable Long id) {
-        Copy copy = copyServiceImplementation.findById(rentalServiceImplementation.findById(id).getCopy().getId());
+        Copy copy = copyService.findById(rentalService.findById(id).getCopy().getId());
         copy.setStatus(Copy.Status.toRent);
-        copyServiceImplementation.save(copy);
-        rentalServiceImplementation.deleteById(id);
+        copyService.save(copy);
+        rentalService.deleteById(id);
     }
 
     @PutMapping("{id}")
     public RentalDto updateRental(@PathVariable Long id, @RequestBody RentalDto rentalDto) {
-        userServiceImplementation.findById(rentalDto.getUserId());
-        copyServiceImplementation.findById(rentalDto.getCopyId());
-        deleteRental(id);
-        addRental(rentalDto.getUserId(), rentalDto.getCopyId());
-        return  rentalDto;
+        User user = userService.findById(rentalDto.getUserId());
+        Copy copy = copyService.findById(rentalDto.getCopyId());
+        Rental rental = rentalService.findById(id);
+        rental.setUser(user);
+        rental.setCopy(copy);
+        return rentalMapper.mapToRentalDto(rentalService.save(rental));
     }
 }

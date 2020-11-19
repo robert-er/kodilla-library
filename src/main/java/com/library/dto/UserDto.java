@@ -1,18 +1,15 @@
-package com.library.model.dto;
+package com.library.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class UserDto {
 
     private String name;
     private String surname;
     private LocalDateTime signUpDate;
-
 }

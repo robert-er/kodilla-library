@@ -6,7 +6,6 @@ import com.library.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +13,7 @@ import java.util.Optional;
 public interface RentalRepository extends JpaRepository<Rental, Long>  {
 
     @Override
-    Rental save(Rental rental);
+    <S extends Rental> S save(S rental);
 
     @Override
     void deleteById(Long id);
@@ -27,6 +26,8 @@ public interface RentalRepository extends JpaRepository<Rental, Long>  {
 
     Optional<Rental> findByUserAndCopyAndDateOfRent(User user, Copy copy, LocalDateTime dateOfRent);
 
+    Optional<Rental> findByUserAndCopy(User user, Copy copy);
+
     List<Rental> findByUserId(Long id);
 
     @Transactional
@@ -34,5 +35,4 @@ public interface RentalRepository extends JpaRepository<Rental, Long>  {
 
     @Transactional
     void deleteByCopyId(Long id);
-
 }

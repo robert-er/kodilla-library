@@ -1,8 +1,8 @@
 package com.library.mapper;
 
 import com.library.model.Copy;
-import com.library.model.dto.CopyDto;
-import com.library.service.implementation.BookServiceImplementation;
+import com.library.dto.CopyDto;
+import com.library.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 @Component
 public class CopyMapper {
 
-    private final BookServiceImplementation bookServiceImplementation;
+    private final BookService bookService;
 
     public Copy mapToCopy(CopyDto copyDto) {
         Copy copy = new Copy();
-        copy.setBook(bookServiceImplementation.findById(copyDto.getBookId()));
+        copy.setBook(bookService.findById(copyDto.getBookId()));
         copy.setStatus(copyDto.getStatus());
         return copy;
     }

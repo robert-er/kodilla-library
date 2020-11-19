@@ -3,26 +3,27 @@ package com.library.service.implementation;
 import com.library.model.Copy;
 import com.library.model.Rental;
 import com.library.model.User;
+import com.library.repository.CopyRepository;
 import com.library.repository.RentalRepository;
+import com.library.repository.UserRepository;
 import com.library.service.RentalService;
-import com.library.service.exception.RentalExistException;
-import com.library.service.exception.RentalNotFoundException;
+import com.library.service.exception.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class RentalServiceImplementation implements RentalService {
 
     private final RentalRepository rentalRepository;
+    private final UserRepository userRepository;
+    private final CopyRepository copyRepository;
 
     private final static int STANDARD_RENTAL_TIME_IN_DAYS = 14;
-
-    public RentalServiceImplementation(RentalRepository rentalRepository) {
-        this.rentalRepository = rentalRepository;
-    }
 
     @Override
     public Rental save(Rental rental) {
@@ -30,22 +31,13 @@ public class RentalServiceImplementation implements RentalService {
     }
 
     @Override
-    public Rental addNewRental(User user, Copy copy) throws RentalExistException {
+    public Rental addNewRental(Long userId, Long copyId) {
+        User user = validateUser(userId);
+        Copy copy = validateCopy(copyId);
+        validateCopyStatus(copy);
+        validateRental(user, copy);
         Rental rental = new Rental(user, copy, LocalDateTime.now(),
                 LocalDateTime.now().plusDays(STANDARD_RENTAL_TIME_IN_DAYS));
-        if (rentalRepository
-                .findByUserAndCopyAndDateOfRent(
-                        rental.getUser(),
-                        rental.getCopy(),
-                        rental.getDateOfRent()
-                ).isPresent()) {
-            throw new RentalExistException(rentalRepository
-                    .findByUserAndCopyAndDateOfRent(
-                            rental.getUser(),
-                            rental.getCopy(),
-                            rental.getDateOfRent()
-                    ).get().getId());
-        }
         copy.setStatus(Copy.Status.rented);
         return save(rental);
     }
@@ -91,7 +83,7 @@ public class RentalServiceImplementation implements RentalService {
     }
 
     @Override
-    public Rental findById(Long id) {
+    public Rental findById(Long id) throws RentalNotFoundException {
         return rentalRepository.findById(id).orElseThrow(() -> new RentalNotFoundException(id));
     }
 
@@ -104,8 +96,26 @@ public class RentalServiceImplementation implements RentalService {
         );
     }
 
-    @Override
-    public void deleteByCopyId(Long copyId) {
-        Optional.ofNullable(copyId).ifPresent(rentalRepository::deleteByCopyId);
+    private User validateUser(Long userId) throws UserNotFoundException {
+        Optional<User> user = userRepository.findById(userId);
+        return user.orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    private Copy validateCopy(Long copyId) throws CopyNotFoundException {
+        Optional<Copy> copy = copyRepository.findById(copyId);
+        return copy.orElseThrow(() -> new CopyNotFoundException(copyId));
+    }
+
+    private void validateCopyStatus(Copy copy) throws CopyIsBorrowedException {
+        if (copy.getStatus() == Copy.Status.rented) {
+            throw new CopyIsBorrowedException(copy.getId());
+        }
+    }
+
+    private void validateRental(User user, Copy copy) throws RentalExistException {
+        Optional<Rental> rental = rentalRepository.findByUserAndCopy(user, copy);
+        if(rental.isPresent()) {
+            throw new RentalExistException(rental.get().getId());
+        }
     }
 }

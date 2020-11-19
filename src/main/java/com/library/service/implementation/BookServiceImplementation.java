@@ -5,18 +5,16 @@ import com.library.repository.BookRepository;
 import com.library.service.BookService;
 import com.library.service.exception.BookExistException;
 import com.library.service.exception.BookNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class BookServiceImplementation implements BookService {
 
     private final BookRepository bookRepository;
-
-    public BookServiceImplementation(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
 
     @Override
     public Book save(Book book) {

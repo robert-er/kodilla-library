@@ -1,7 +1,7 @@
 package com.library.mapper;
 
 import com.library.model.Book;
-import com.library.model.dto.BookDto;
+import com.library.dto.BookDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

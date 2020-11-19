@@ -1,6 +1,6 @@
 package com.library.controller;
 
-import com.library.model.dto.BookDto;
+import com.library.dto.BookDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -68,9 +68,10 @@ class BookControllerTest {
         int year2 = 1666;
         String bookId1 = createBook(author1, title1, year1);
         String bookId2 = createBook(author2, title2, year2);
-        //When
+
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<BookDto> entity = new HttpEntity<>(null, headers);
+        //When
         ResponseEntity<String> response = restTemplate.exchange(createURLWithPort(""),
                 HttpMethod.GET, entity, String.class);
         //Then

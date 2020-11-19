@@ -1,8 +1,8 @@
 package com.library.controller;
 
 import com.library.model.Copy;
-import com.library.model.dto.BookDto;
-import com.library.model.dto.CopyDto;
+import com.library.dto.BookDto;
+import com.library.dto.CopyDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;

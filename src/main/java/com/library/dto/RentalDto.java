@@ -1,4 +1,4 @@
-package com.library.model.dto;
+package com.library.dto;
 
 import lombok.Value;
 
@@ -11,5 +11,4 @@ public class RentalDto {
     Long copyId;
     LocalDateTime dateOfRent;
     LocalDateTime dateOfReturn;
-
 }

@@ -1,7 +1,7 @@
 package com.library.mapper;
 
 import com.library.model.User;
-import com.library.model.dto.UserDto;
+import com.library.dto.UserDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

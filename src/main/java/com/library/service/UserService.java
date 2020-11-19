@@ -5,7 +5,6 @@ import com.library.service.exception.UserExistException;
 import com.library.service.exception.UserNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
 
@@ -14,5 +13,4 @@ public interface UserService {
     void deleteById(Long id) throws UserNotFoundException;
     List<User> getAll();
     User findById(Long id) throws UserNotFoundException;
-
 }

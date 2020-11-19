@@ -1,6 +1,6 @@
 package com.library.controller;
 
-import com.library.model.dto.UserDto;
+import com.library.dto.UserDto;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;

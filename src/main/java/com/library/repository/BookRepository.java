@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Override
-    Book save(Book book);
+    <S extends Book>S save(S book);
 
     @Override
     void deleteById(Long id);
@@ -21,5 +21,4 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findById(Long id);
 
     Optional<Book> findByAuthorAndTitleAndYear(String author, String title, int year);
-
 }
