@@ -36,9 +36,12 @@ public class RentalServiceImplementation implements RentalService {
         Copy copy = validateCopy(copyId);
         validateCopyStatus(copy);
         validateRental(user, copy);
-        Rental rental = new Rental(user, copy, LocalDateTime.now(),
-                LocalDateTime.now().plusDays(STANDARD_RENTAL_TIME_IN_DAYS));
-        copy.setStatus(Copy.Status.rented);
+        Rental rental = Rental.builder()
+                .user(user)
+                .copy(copy)
+                .dateOfRent(LocalDateTime.now())
+                .dateOfReturn(LocalDateTime.now().plusDays(STANDARD_RENTAL_TIME_IN_DAYS))
+                .build();
         return save(rental);
     }
 

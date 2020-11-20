@@ -1,5 +1,6 @@
 package com.library.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,13 @@ public class User {
 
     @OneToMany(targetEntity = Rental.class, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rental> rentals;
+
+    @Builder
+    public User(String name, String surname, LocalDateTime signUpDate) {
+        this.name = name;
+        this.surname = surname;
+        this.signUpDate = signUpDate;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -1,6 +1,7 @@
 package com.library.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +31,12 @@ public class Copy {
 
     @OneToMany(targetEntity = Rental.class, mappedBy = "copy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rental> rentals;
+
+    @Builder
+    public Copy(@NotNull Book book, Status status) {
+        this.book = book;
+        this.status = status;
+    }
 
     public enum Status {
         toRent, rented;

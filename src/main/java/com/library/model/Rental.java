@@ -1,5 +1,6 @@
 package com.library.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,7 @@ public class Rental {
     private LocalDateTime dateOfRent;
     private LocalDateTime dateOfReturn;
 
+    @Builder
     public Rental(User user, Copy copy, LocalDateTime dateOfRent, LocalDateTime dateOfReturn) {
         this.user = user;
         this.copy = copy;

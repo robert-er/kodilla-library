@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
     public User mapToUser(UserDto userDto) {
-        User user = new User();
-        user.setName(userDto.getName());
-        user.setSurname(userDto.getSurname());
-        user.setSignUpDate(userDto.getSignUpDate());
-        return user;
+        return User.builder()
+                .name(userDto.getName())
+                .surname(userDto.getSurname())
+                .signUpDate(userDto.getSignUpDate())
+                .build();
     }
 
     public UserDto mapToUserDto(User user) {

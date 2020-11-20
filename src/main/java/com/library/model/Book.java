@@ -1,6 +1,7 @@
 package com.library.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,13 @@ public class Book {
             mappedBy = "book",
             cascade = CascadeType.ALL)
     private List<Copy> copies;
+
+    @Builder
+    public Book(String author, String title, int year) {
+        this.author = author;
+        this.title = title;
+        this.year = year;
+    }
 
     @Override
     public boolean equals(Object o) {

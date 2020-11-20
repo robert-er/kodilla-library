@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 public class BookMapper {
 
     public Book mapToBook(BookDto bookDto) {
-        Book book = new Book();
-        book.setAuthor(bookDto.getAuthor());
-        book.setTitle(bookDto.getTitle());
-        book.setYear(bookDto.getYear());
-        return book;
+        return Book.builder()
+                .author(bookDto.getAuthor())
+                .title(bookDto.getTitle())
+                .year(bookDto.getYear())
+                .build();
     }
 
     public BookDto mapToBookDto(Book book) {
