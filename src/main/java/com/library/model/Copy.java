@@ -1,11 +1,14 @@
 package com.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -15,13 +18,27 @@ public class Copy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
 
-    @ManyToOne
+    @JsonBackReference
+    @NotNull
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="book_id")
-    Book book;
+    private Book book;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
+    @OneToMany(targetEntity = Rental.class, mappedBy = "copy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rental> rentals;
+
+    @Builder
+    public Copy(@NotNull Book book, Status status) {
+        this.book = book;
+        this.status = status;
+    }
+
+    public enum Status {
+        toRent, rented;
+    }
 }

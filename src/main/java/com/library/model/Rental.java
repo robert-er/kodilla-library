@@ -1,12 +1,13 @@
 package com.library.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
@@ -16,18 +17,39 @@ public class Rental {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "copy_id")
-    Copy copy;
+    private Copy copy;
 
-    LocalDateTime dateOfRent;
-    LocalDateTime dateOfReturn;
+    private LocalDateTime dateOfRent;
+    private LocalDateTime dateOfReturn;
 
+    @Builder
+    public Rental(User user, Copy copy, LocalDateTime dateOfRent, LocalDateTime dateOfReturn) {
+        this.user = user;
+        this.copy = copy;
+        this.dateOfRent = dateOfRent;
+        this.dateOfReturn = dateOfReturn;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rental rental = (Rental) o;
+        return user.equals(rental.user) &&
+                copy.equals(rental.copy) &&
+                dateOfRent.equals(rental.dateOfRent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, copy, dateOfRent);
+    }
 }
