@@ -48,4 +48,6 @@ public class UserController {
         user.setSignUpDate(userDto.getSignUpDate());
         return userMapper.mapToUserDto(userService.save(user));
     }
+
+
 }

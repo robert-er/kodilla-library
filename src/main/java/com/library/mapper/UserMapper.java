@@ -14,7 +14,6 @@ public class UserMapper {
         return User.builder()
                 .name(userDto.getName())
                 .surname(userDto.getSurname())
-                .signUpDate(userDto.getSignUpDate())
                 .build();
     }
 
