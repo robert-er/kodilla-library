@@ -59,12 +59,13 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @Builder
-    public User(String username, String name, String surname, String email, String password) {
+    public User(String username, String name, String surname, String email, String password, Set<Role> roles) {
         this.username = username;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
+        this.roles = roles;
         this.signUpDate = LocalDateTime.now();
     }
 

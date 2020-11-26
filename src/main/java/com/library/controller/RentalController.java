@@ -9,6 +9,7 @@ import com.library.service.CopyService;
 import com.library.service.RentalService;
 import com.library.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,21 +26,25 @@ public class RentalController {
     private final RentalMapper rentalMapper;
 
     @PostMapping
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public Long addRental(@RequestParam Long userId, @RequestParam Long copyId) {
         return rentalService.addNewRental(userId, copyId).getId();
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public RentalDto getRental(@PathVariable Long id) {
         return rentalMapper.mapToRentalDto(rentalService.findById(id));
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<RentalDto> getAll() {
         return rentalMapper.mapToRentalDtoList(rentalService.getAll());
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public void deleteRental(@PathVariable Long id) {
         Copy copy = copyService.findById(rentalService.findById(id).getCopy().getId());
         copy.setStatus(Copy.Status.toRent);
@@ -48,6 +53,7 @@ public class RentalController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public RentalDto updateRental(@PathVariable Long id, @RequestBody RentalDto rentalDto) {
         User user = userService.findById(rentalDto.getUserId());
         Copy copy = copyService.findById(rentalDto.getCopyId());
