@@ -40,7 +40,7 @@ public class UserController {
     @PostMapping("/auth/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+                new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword());
 
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
