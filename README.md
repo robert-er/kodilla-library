@@ -1,5 +1,5 @@
 # kodilla-library
-Kodilla Library Project
+Welcome in Kodilla Library Project!
 
 ### 1. Project description 
 The project consist of backend library service, based on REST architecture. 
@@ -13,7 +13,7 @@ Please make sure You have following software:
 3) MySQL 8
 
 ### 4. Project 
-In order to launch project You have to start LibraryApplication class.
+In order to launch project you have to start LibraryApplication class.
 You can check endpoints operation on [http://localhost:8080](http://localhost:8080) address.
 
 ### 5. Jwt authentication
