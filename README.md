@@ -8,10 +8,11 @@ Project is not uploaded to remote server yet. Application tested on localhost
 
 ### 3. Requirements
 Please make sure You have following software:
+```bash
 1) Java 8
 2) Gradle 6.6.1
 3) MySQL 8
-
+```
 ### 4. Project 
 In order to launch project you have to start LibraryApplication class.
 You can check endpoints operation on [http://localhost:8080](http://localhost:8080) address.
