@@ -35,9 +35,11 @@ You can test all endpoint via swagger.
 
 ### 7. Future plans
 Plans to improve project with:
+```bash
 1) Spring authentication (done: Jwt authentication, endpoints are secured to use with user, admin or moderator roles)
 2) Transactional features
 3) Automatic mailing features
+```
 
 ### 8. Troubleshooting 
 If You encounter any problems regarding operation, please let us know. 
