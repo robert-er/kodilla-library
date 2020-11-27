@@ -18,8 +18,11 @@ You can check endpoints operation on [http://localhost:8080](http://localhost:80
 
 ### 5. Jwt authentication
 Jwt authentication is applied in this project. Token type is Bearer. 
-First of all you need to register your user using endpoint `./user/auth/signup`. 
-Please use `./user/auth/signin` endpoint to get token.
+First of all you need to register your user using endpoint `./library/user/auth/signup`. 
+Please use `./library/user/auth/signin` endpoint to get token. 
+Endpoints `signup` and `signin` have access without authentication.
+For all other endpoints need to pass authentication with valid token and one of role `user`, `mod` or `admin`.
+ Some endpoints are available only with `moderator` or `admin` role.  
 
 ### 6. Endpoint description
 All information regarding endpoints are covered in Swagger documentation.
