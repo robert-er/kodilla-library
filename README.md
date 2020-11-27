@@ -28,7 +28,7 @@ docker build -t library .
 docker-compose up
 ```
 Now application is running on `http://localhost:8080`
-You can start using with register you user by endpoint: 
+To start you have to register your user by endpoint: 
 
 `POST http://localhost:8080/library/user/auth/signup`
 
