@@ -11,10 +11,30 @@ Please make sure You have following software:
 ```bash
 1) Java 8
 2) Gradle 6.6.1
-3) MySQL 8
+3) Docker 19.03.13
 ```
-### 4. Project 
-In order to launch project you have to start LibraryApplication class.
+### 4. Docker launch 
+In order to launch project you have to do next steps:
+1. build jar package. Please use terminal:
+ ```
+gradlew clean build
+```
+2. build docker image
+```
+docker build -t library .
+```
+3. run docker compose
+```
+docker-compose up
+```
+Now application is running on `http://localhost:8080`
+To start you have to register your user by endpoint: 
+
+`POST http://localhost:8080/library/user/auth/signup`
+
+Docker configuration is available in `Dockerfile` and `docker-compose.yml`.
+
+In  class.
 You can check endpoints operation on [http://localhost:8080](http://localhost:8080) address.
 
 ### 5. Jwt authentication
